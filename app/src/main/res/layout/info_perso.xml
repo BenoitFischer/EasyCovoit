@@ -9,23 +9,23 @@
         android:id="@+id/valider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="148dp"
-        android:layout_marginStart="150dp"
-        android:layout_marginTop="300dp"
+        android:layout_marginBottom="15dp"
         android:text="Valider"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/nomText"
         android:layout_width="wrap_content"
         android:layout_height="46dp"
-        android:layout_marginStart="100dp"
         android:layout_marginTop="100dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,11 +33,12 @@
         android:id="@+id/prenomText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
         android:layout_marginTop="200dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,19 +46,74 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="80dp"
         android:text="Nom"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/nomText"
+        app:layout_constraintStart_toStartOf="@+id/nomText" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="180dp"
         android:text="Prénom"
+        app:layout_constraintBottom_toTopOf="@+id/prenomText"
+        app:layout_constraintStart_toStartOf="@+id/prenomText" />
+
+    <Spinner
+        android:id="@+id/menuDeroulantMrMme"
+        android:layout_width="214dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/lieuHabitatText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="300dp"
+        android:ems="10"
+        android:inputType="textPostalAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/lieuBoulotText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="400dp"
+        android:ems="10"
+        android:inputType="textPostalAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Titre"
+        app:layout_constraintBottom_toTopOf="@+id/menuDeroulantMrMme"
+        app:layout_constraintStart_toStartOf="@+id/menuDeroulantMrMme" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lieu de domicile"
+        app:layout_constraintBottom_toTopOf="@+id/lieuHabitatText"
+        app:layout_constraintStart_toStartOf="@+id/lieuHabitatText" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lieu de travail"
+        app:layout_constraintBottom_toTopOf="@+id/lieuBoulotText"
+        app:layout_constraintStart_toStartOf="@+id/lieuBoulotText" />
+
 </android.support.constraint.ConstraintLayout>

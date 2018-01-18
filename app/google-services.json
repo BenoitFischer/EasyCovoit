@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "658244100050-j8cttpimst2fmif8ouq5lp8stbf6umuk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "fr.toulon.seatech.easycovoit",
+            "certificate_hash": "bd2a7f4d77b38dd1b47f64ba0538a2cb0fe8fbb5"
+          }
+        },
+        {
           "client_id": "658244100050-ilojpuap1i963u7gj5he4q31cvm97l0b.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "658244100050-ilojpuap1i963u7gj5he4q31cvm97l0b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
