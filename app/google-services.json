@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "658244100050",
+    "firebase_url": "https://easycovoit-41bb6.firebaseio.com",
+    "project_id": "easycovoit-41bb6",
+    "storage_bucket": "easycovoit-41bb6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:658244100050:android:94a394b5d6966c62",
+        "android_client_info": {
+          "package_name": "fr.toulon.seatech.easycovoit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "658244100050-ilojpuap1i963u7gj5he4q31cvm97l0b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATcY3od80iGCZx3csUMABuWAQbKfWtylk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
