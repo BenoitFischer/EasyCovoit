@@ -12,8 +12,6 @@ tools:context="fr.toulon.seatech.easycovoit.LoginActivity">
     android:layout_height="25dp"
     android:layout_alignBaseline="@+id/emailLog"
     android:layout_alignBottom="@+id/emailLog"
-    android:layout_toEndOf="@+id/progressBar"
-    android:layout_toRightOf="@+id/progressBar"
     android:text="@string/view_email" />
 
 <TextView
@@ -22,8 +20,6 @@ tools:context="fr.toulon.seatech.easycovoit.LoginActivity">
     android:layout_height="26dp"
     android:layout_alignBaseline="@+id/pwdLog"
     android:layout_alignBottom="@+id/pwdLog"
-    android:layout_toEndOf="@+id/progressBar"
-    android:layout_toRightOf="@+id/progressBar"
     android:text="@string/view_pwd"
     />
 
@@ -33,7 +29,6 @@ tools:context="fr.toulon.seatech.easycovoit.LoginActivity">
     android:layout_height="wrap_content"
     android:layout_alignParentEnd="true"
     android:layout_alignParentRight="true"
-    android:layout_below="@+id/progressBar"
     android:layout_toEndOf="@+id/viewEmail"
     android:layout_toRightOf="@+id/viewEmail"
     android:ems="10"
@@ -92,13 +87,16 @@ tools:context="fr.toulon.seatech.easycovoit.LoginActivity">
     android:textSize="8sp"
     android:visibility="visible" />
 
-<ProgressBar
-    android:id="@+id/progressBar"
-    style="?android:attr/progressBarStyle"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="4dp"
-    android:visibility="gone"
-    tools:visibility="gone" />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_reset"
+        android:layout_marginTop="91dp"
+        android:layout_toLeftOf="@+id/btn_reset"
+        android:layout_toStartOf="@+id/btn_reset"
+        android:visibility="gone"
+        tools:visibility="gone"/>
 
 </RelativeLayout>
