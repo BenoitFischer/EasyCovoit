@@ -2,6 +2,9 @@ package fr.toulon.seatech.easycovoit;
 
 
 import android.app.Application;
+import android.content.Intent;
+import android.media.session.MediaSession;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +20,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,41 +43,143 @@ import java.util.EventListener;
 public class InfoPerso extends AppCompatActivity {
 
     private static final String TAG = "";
-    String strMrMme="", strNom="", strPrenom="", strLieuHabitation="", strLieuBoulot ="";
+    String uid, strMrMme="", strNom="", strPrenom="", strLieuHabitation="", strLieuBoulot ="";
+    String genreDatabasase, nomDatabase, prenomDatabase, lieuHabitatDatabase, lieuBoulotDatabase;
     EditText editTextNom, editTextPrenom, editTextHabitat, editTextBoulot;
     Spinner spinnerMrMme;
-    DatabaseReference mRootRef, mUserRef, mChildGenre, mChildNom, mChildPrenom, mChildHabitation, mChildBoulot;
+    DatabaseReference mRootRef, mIDRef, mUserRef, mChildGenre, mChildNom, mChildPrenom, mChildHabitation, mChildBoulot;
+    Button bValider;
+    String[] strChoixSpinner={"Monsieur","Madame", "Demoiseau", "Demoiselle"};
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.info_perso);
+        bValider = (Button) findViewById(R.id.valider);
 
         // Read datas from the database
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            //email address and uid
+            String email = user.getEmail();
+            uid = user.getUid();
 
+            Log.d("email", email);
+            Log.d("uid", uid);
+        }
+        else{
+            uid = "Unknown user";
+            Log.d(TAG,"No user signed in");
+        }
 
+        // récupère la database de firebase
         mRootRef = FirebaseDatabase.getInstance().getReference();
-        mUserRef = mRootRef.child("User");
-        mChildGenre = mUserRef.child("Genre");
-        mChildNom = mUserRef.child("Nom");
-        mChildPrenom = mUserRef.child("Prenom");
-        mChildHabitation = mUserRef.child("Lieu de domicile");
-        mChildBoulot = mUserRef.child("Lieu de travail");
+        if (mRootRef != null) {
+            mUserRef = mRootRef.child("Users");
+            mIDRef = mUserRef.child(uid);
+            mChildGenre = mIDRef.child("Genre");
+            mChildNom = mIDRef.child("Nom");
+            mChildPrenom = mIDRef.child("Prenom");
+            mChildHabitation = mIDRef.child("Lieu de domicile");
+            mChildBoulot = mIDRef.child("Lieu de travail");
 
-        mRootRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                //strNom = dataSnapshot.getValue(String.class);
-                Log.d(TAG, "Value is: " + strNom);
-            }
+            // Listener des différentes values
+            mChildGenre.addValueEventListener(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    genreDatabasase = dataSnapshot.getValue(String.class);
+                    if (genreDatabasase != null) {
+                        Log.v("Le genre database est ", genreDatabasase);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "Failed to read value.");
+                        //cherche la position de genre dans la liste du spinner
+                        int position=0;
+                        // on incrémente i jusqu'a ce qu'un élément de la liste du spinner soit le même que le genre de la base de donnée
+                        for (int i = 0; i<strChoixSpinner.length; i++)
+                        {
+                            if (genreDatabasase.equals(strChoixSpinner[i])){
+                                position = i;
+                            }
+                        }
 
-            }
-        });
+                        // on set l'élément correspondant comme premier élément du spinner
+                        spinnerMrMme.setSelection(position);
+                        spinnerMrMme.invalidate();
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "Failed to read value.");
+                }
+            });
+
+            mChildNom.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    nomDatabase = dataSnapshot.getValue(String.class);
+                    if (nomDatabase != null) {
+                        Log.v("Le nom database est ", nomDatabase);
+                        editTextNom.setText(nomDatabase);
+                        editTextNom.invalidate();
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "Failed to read value.");
+                }
+            });
+
+            mChildPrenom.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    prenomDatabase = dataSnapshot.getValue(String.class);
+                    if (prenomDatabase != null) {
+                        Log.v("Le prenom database est ", prenomDatabase);
+                        editTextPrenom.setText(prenomDatabase);
+                        editTextPrenom.invalidate();
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "Failed to read value.");
+                }
+            });
+
+            mChildHabitation.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    lieuHabitatDatabase = dataSnapshot.getValue(String.class);
+                    if (lieuHabitatDatabase != null) {
+                        Log.v("L'habitat database est ", lieuHabitatDatabase);
+                        editTextHabitat.setText(lieuHabitatDatabase);
+                        editTextHabitat.invalidate();
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "Failed to read value.");
+                }
+            });
+
+            mChildBoulot.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    lieuBoulotDatabase = dataSnapshot.getValue(String.class);
+                    if (lieuBoulotDatabase != null) {
+                        Log.v("Boulot database est ", lieuBoulotDatabase);
+                        editTextBoulot.setText(lieuBoulotDatabase);
+                        editTextBoulot.invalidate();
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "Failed to read value.");
+                }
+            });
+        }
+        else{}
 
         //Récuperer le nom et prénom
         editTextNom = (EditText) findViewById (R.id.nomText);
@@ -78,7 +187,6 @@ public class InfoPerso extends AppCompatActivity {
 
         //Déroulement du menu déroulant
         spinnerMrMme = (Spinner) findViewById(R.id.menuDeroulantMrMme);
-        String[] strChoixSpinner={"Monsieur","Madame", "Demoiseau", "Demoiselle"};
         ArrayAdapter<String> dataAdapterMrMme = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,strChoixSpinner);
         dataAdapterMrMme.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMrMme.setAdapter(dataAdapterMrMme);
@@ -87,8 +195,8 @@ public class InfoPerso extends AppCompatActivity {
         spinnerMrMme.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                strMrMme = String.valueOf(spinnerMrMme.getSelectedItem()); }
-
+                strMrMme = String.valueOf(spinnerMrMme.getSelectedItem());
+            }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // TODO Auto-generated method stub
@@ -99,40 +207,43 @@ public class InfoPerso extends AppCompatActivity {
         editTextHabitat= (EditText) findViewById (R.id.lieuHabitatText);
         editTextBoulot= (EditText) findViewById (R.id.lieuBoulotText);
 
-        // validation et stockage des informations
-        Button valider = (Button) findViewById(R.id.valider);
-        valider.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //-- Stockage des informations
-
-                //Stockage du nom et du prénom
-                strNom = editTextNom.getText().toString();
-                strPrenom = editTextPrenom.getText().toString();
-
-                //Stockage du lieu de domicile et du lieu de travail
-                strLieuHabitation = editTextHabitat.getText().toString();
-                strLieuBoulot = editTextBoulot.getText().toString();
-
-                // Ecriture dans la base de donnée
-                mChildGenre.setValue(strMrMme);
-                mChildNom.setValue(strNom);
-                mChildPrenom.setValue(strPrenom);
-                mChildHabitation.setValue(strLieuHabitation);
-                mChildBoulot.setValue(strLieuBoulot);
-
-                //Pour voir les valeurs que j'ai récupérées
-                Log.v("Genre",strMrMme);
-                Log.v("Nom",strNom);
-                Log.v("Prenom",strPrenom);
-                Log.v("Habitat",strLieuHabitation);
-                Log.v("Boulot",strLieuBoulot);
-
-
-            }
-        });
+        // met en place un click listener sur le bouton valider
+        bValider.setOnClickListener(bValiderListener);
     }
+
+    // validation et stockage des informations
+    private View.OnClickListener bValiderListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            //-- Stockage des informations
+
+            //Stockage du nom et du prénom
+            strNom = editTextNom.getText().toString();
+            strPrenom = editTextPrenom.getText().toString();
+
+            //Stockage du lieu de domicile et du lieu de travail
+            strLieuHabitation = editTextHabitat.getText().toString();
+            strLieuBoulot = editTextBoulot.getText().toString();
+
+            // Ecriture dans la base de donnée
+            mChildGenre.setValue(strMrMme);
+            mChildNom.setValue(strNom);
+            mChildPrenom.setValue(strPrenom);
+            mChildHabitation.setValue(strLieuHabitation);
+            mChildBoulot.setValue(strLieuBoulot);
+
+            //Pour voir les valeurs que j'ai récupérées
+            Log.v("Genre",strMrMme);
+            Log.v("Nom",strNom);
+            Log.v("Prenom",strPrenom);
+            Log.v("Habitat",strLieuHabitation);
+            Log.v("Boulot",strLieuBoulot);
+
+            // Retourne sur le main
+            finish();
+
+        }
+    };
 
     public String getNom() {
         return strNom;
