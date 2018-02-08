@@ -43,11 +43,11 @@ import java.util.EventListener;
 public class InfoPerso extends AppCompatActivity {
 
     private static final String TAG = "";
-    String uid, strMrMme="", strNom="", strPrenom="", strLieuHabitation="", strLieuBoulot ="";
-    String genreDatabasase, nomDatabase, prenomDatabase, lieuHabitatDatabase, lieuBoulotDatabase;
-    EditText editTextNom, editTextPrenom, editTextHabitat, editTextBoulot;
+    String uid, strMrMme="", strNom="", strPrenom="", strLieuHabitation="", strLieuBoulot ="", strNumTel ="";
+    String genreDatabasase, nomDatabase, prenomDatabase, lieuHabitatDatabase, lieuBoulotDatabase, numTelDatabase;
+    EditText editTextNom, editTextPrenom, editTextHabitat, editTextBoulot, editTextNumTel;
     Spinner spinnerMrMme;
-    DatabaseReference mRootRef, mIDRef, mUserRef, mChildGenre, mChildNom, mChildPrenom, mChildHabitation, mChildBoulot;
+    DatabaseReference mRootRef, mIDRef, mUserRef, mChildGenre, mChildNom, mChildPrenom, mChildHabitation, mChildBoulot, mChildNumTel;
     Button bValider;
     String[] strChoixSpinner={"Monsieur","Madame", "Demoiseau", "Demoiselle"};
 
@@ -83,6 +83,7 @@ public class InfoPerso extends AppCompatActivity {
             mChildPrenom = mIDRef.child("Prenom");
             mChildHabitation = mIDRef.child("Lieu de domicile");
             mChildBoulot = mIDRef.child("Lieu de travail");
+            mChildNumTel = mIDRef.child("Lieu de travail");
 
             // Listener des différentes values
             mChildGenre.addValueEventListener(new ValueEventListener()
@@ -178,6 +179,22 @@ public class InfoPerso extends AppCompatActivity {
                     Log.w(TAG, "Failed to read value.");
                 }
             });
+
+            mChildPrenom.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    numTelDatabase = dataSnapshot.getValue(String.class);
+                    if (numTelDatabase != null) {
+                        Log.v("Boulot database est ", numTelDatabase);
+                        editTextNumTel.setText(numTelDatabase);
+                        editTextNumTel.invalidate();
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "Failed to read value.");
+                }
+            });
         }
         else{}
 
@@ -203,9 +220,10 @@ public class InfoPerso extends AppCompatActivity {
             }
         });
 
-        // récupération des lieux de domicile et de travail
-        editTextHabitat= (EditText) findViewById (R.id.lieuHabitatText);
-        editTextBoulot= (EditText) findViewById (R.id.lieuBoulotText);
+        // récupération des lieux de domicile et de travail et du numéro de tél
+        editTextHabitat = (EditText) findViewById (R.id.lieuHabitatText);
+        editTextBoulot = (EditText) findViewById (R.id.lieuBoulotText);
+        editTextNumTel = (EditText) findViewById (R.id.numTelText);
 
         // met en place un click listener sur le bouton valider
         bValider.setOnClickListener(bValiderListener);
@@ -221,9 +239,10 @@ public class InfoPerso extends AppCompatActivity {
             strNom = editTextNom.getText().toString();
             strPrenom = editTextPrenom.getText().toString();
 
-            //Stockage du lieu de domicile et du lieu de travail
+            //Stockage du lieu de domicile, du lieu de travail et du numéro de tél
             strLieuHabitation = editTextHabitat.getText().toString();
             strLieuBoulot = editTextBoulot.getText().toString();
+            strNumTel = editTextNumTel.getText().toString();
 
             // Ecriture dans la base de donnée
             mChildGenre.setValue(strMrMme);
@@ -231,6 +250,7 @@ public class InfoPerso extends AppCompatActivity {
             mChildPrenom.setValue(strPrenom);
             mChildHabitation.setValue(strLieuHabitation);
             mChildBoulot.setValue(strLieuBoulot);
+            mChildNumTel.setValue(strNumTel);
 
             //Pour voir les valeurs que j'ai récupérées
             Log.v("Genre",strMrMme);
@@ -238,40 +258,13 @@ public class InfoPerso extends AppCompatActivity {
             Log.v("Prenom",strPrenom);
             Log.v("Habitat",strLieuHabitation);
             Log.v("Boulot",strLieuBoulot);
+            Log.v("Tél",strNumTel);
 
             // Retourne sur le main
             finish();
 
         }
     };
-
-    public String getNom() {
-        return strNom;
-    }
-
-    public void setNom(String nom) {
-        this.strNom = nom;
-    }
-
-    public String getPrenom() {
-        return strPrenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.strPrenom = prenom;
-    }
-
-    public String getLieuHabitation() { return strLieuHabitation;   }
-
-    public void setLieuHabitation(String lieuHabitation) {  this.strLieuHabitation = lieuHabitation;    }
-
-    public String getLieuBoulot() {
-        return strLieuBoulot;
-    }
-
-    public void setLieuBoulot(String lieuBoulot) {
-        this.strLieuBoulot = lieuBoulot;
-    }
 
 
 

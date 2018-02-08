@@ -18,6 +18,14 @@
     <string name="main_auth_succes">You\'re successfully connected !!</string>
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
-    n
     <string name="deconnexion">Se déconnecter></string>
+    <string name="conducteur">Conducteur :</string>
+    <string name="depart">Lieu de départ :</string>
+    <string name="arrivee">Lieu d\'arrivée :</string>
+    <string name="dateHeure">Date et heure:</string>
+    <string name="proposer">Proposer le trajet!</string>
+    <string name="nbPlaceDispo">Nombre de places proposé :</string>
+    <string name="numeroTel">Numéro de telephone</string>
+    <string name="date">Date :</string>
+    <string name="demain">Demain</string>
 </resources>

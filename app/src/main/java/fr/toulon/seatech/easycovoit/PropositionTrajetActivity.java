@@ -19,10 +19,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.Calendar;
 
-public class PropositionTrajet extends AppCompatActivity implements View.OnClickListener {
+
+public class PropositionTrajetActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "";
 
@@ -39,6 +39,7 @@ public class PropositionTrajet extends AppCompatActivity implements View.OnClick
     DatabaseReference mInfoTrajetRef, mInfoConducteurRef, mInfoPassagerRef;
 
     DatabaseReference currentUserNameDatabase, currentUserLastNameDatabase, currentUserGenreDatabase;
+    int currentDate = Calendar.getInstance().get(Calendar.DATE);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,23 +52,6 @@ public class PropositionTrajet extends AppCompatActivity implements View.OnClick
         btnProposer = (Button) findViewById(R.id.btnProposer);
         DateHeure.setOnClickListener(edDateHeure);
         btnProposer.setOnClickListener(this);
-
-
-        FirebaseDatabase.getInstance().getReference().child("Trajet").addValueEventListener(new ValueEventListener() {
-            @Override
-
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                setNbTrajetExistants(dataSnapshot.getChildrenCount());
-                Log.v("datasnapshot:", String.valueOf(nbTrajetExistants));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-        });
 
         // Read datas from the database
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -153,6 +137,8 @@ public class PropositionTrajet extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
 
+
+
         //-- Stockage d'une proposition de trajet
 
         //Stockage du lieu de départ, du lieu de d'arrivée, du nombre de place proposé
@@ -164,16 +150,15 @@ public class PropositionTrajet extends AppCompatActivity implements View.OnClick
 
         mRootRef = FirebaseDatabase.getInstance().getReference();
         if(mRootRef !=null){
-            mTrajetRef = mRootRef.child("Trajet");
+            mTrajetRef = mRootRef.child("TrajetHeure");
+            mDateRef = mTrajetRef.child(strDate);
 
-            if(getNbTrajetExistants()==0){
-                Log.v("nbTrajetsExistants==0:", String.valueOf(getNbTrajetExistants()));
-                mIDTrajet = mTrajetRef.child("Trajet " + String.valueOf(1));
+            if(mDateRef!=null && nbTrajetExistants==0){
+                mIDTrajet = mDateRef.child("Trajet " + String.valueOf(1));
 
                 mInfoTrajetRef = mIDTrajet.child("Informations du trajet");
                 mLieuDepartRef = mInfoTrajetRef.child("Lieu de départ");
                 mLieuArriveeRef = mInfoTrajetRef.child("Lieu d'arrivée");
-                mDateRef = mInfoTrajetRef.child("Date");
                 mHeureRef =  mInfoTrajetRef.child("Heure");
                 mNbPlacePropose = mInfoTrajetRef.child("Nombre de places restantes");
 
@@ -199,15 +184,19 @@ public class PropositionTrajet extends AppCompatActivity implements View.OnClick
                     mPrenomPassager.setValue("");
                 }
             }
-            else if(nbTrajetExistants>0){
+            //if(getNbTrajetExistants()==0){
+            //    Log.v("nbTrajetsExistants==0:", String.valueOf(getNbTrajetExistants()));
+
+            //}
+            else if(mDateRef!=null && nbTrajetExistants>0){
                 Log.v("nbTrajetsExistants>0:", String.valueOf(nbTrajetExistants));
-                mIDTrajet = mTrajetRef.child("Trajet " + String.valueOf(++nbTrajetExistants));
+                mIDTrajet = mDateRef.child("Trajet " + String.valueOf(++nbTrajetExistants));
                 Log.v("nbTrajetsExistants>0++:", String.valueOf(nbTrajetExistants));
 
                 mInfoTrajetRef = mIDTrajet.child("Informations du trajet");
                 mLieuDepartRef = mInfoTrajetRef.child("Lieu de départ");
                 mLieuArriveeRef = mInfoTrajetRef.child("Lieu d'arrivée");
-                mDateRef = mInfoTrajetRef.child("Date");
+                //mDateRef = mInfoTrajetRef.child("Date");
                 mHeureRef =  mInfoTrajetRef.child("Heure");
                 mNbPlacePropose = mInfoTrajetRef.child("Nombre de places restantes");
 
@@ -245,7 +234,7 @@ public class PropositionTrajet extends AppCompatActivity implements View.OnClick
         mNomCovoitureur.setValue(strNomCovoitureur);
         mLieuDepartRef.setValue(strLieuDepart);
         mLieuArriveeRef.setValue(strLieuArrivee);
-        mDateRef.setValue(strDate);
+        //mDateRef.setValue(strDate);
         mHeureRef.setValue(strHeure);
         mNbPlacePropose.setValue(strNbPlacePropose);
         //Pour voir les valeurs que j'ai récupérées
@@ -258,7 +247,7 @@ public class PropositionTrajet extends AppCompatActivity implements View.OnClick
         Log.v("Heure",strDate);
         Log.v("Nb de places restantes",strNbPlacePropose);
         // Retourne sur le main
-        Intent intent = new Intent(PropositionTrajet.this, MainActivity.class);
+        Intent intent = new Intent(PropositionTrajetActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
 
@@ -275,6 +264,10 @@ public class PropositionTrajet extends AppCompatActivity implements View.OnClick
         //DatePickerDialog(Context context, DatePickerDialog.OnDateSetListener listener, int year, int month, int dayOfMonth)
         //Creates a new date picker dialog for the specified date using the parent context's default date picker dialog theme.
 
+        //Get yesterday's date
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1);
+
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
 
@@ -282,9 +275,27 @@ public class PropositionTrajet extends AppCompatActivity implements View.OnClick
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
                         strDate = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                        FirebaseDatabase.getInstance().getReference().child("TrajetHeure").child(strDate).addValueEventListener(new ValueEventListener() {
+                            @Override
+
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                setNbTrajetExistants(dataSnapshot.getChildrenCount());
+                                Log.v("datasnapshot:", String.valueOf(nbTrajetExistants));
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+
+                        });
                     }
                 }, mAnnee, mMois, mJour);
+
         timePicker();
+        //Set yesterday time milliseconds as date pickers minimum date
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
         datePickerDialog.show();
     }
 

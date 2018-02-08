@@ -26,14 +26,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,15 +119,19 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_info_perso) {
-            // Handle the camera action
             Intent i = new Intent(MainActivity.this, InfoPerso.class);
             startActivity(i);
-        } else if (id == R.id.nav_chauffeur) {
+            finish();
+        } else if (id == R.id.nav_propositionTrajet) {
+            Intent intent = new Intent(MainActivity.this, PropositionTrajet.class);
+            startActivity(intent);
+            finish();
+        } else if (id == R.id.nav_rechercheTrajet) {
 
-        } else if (id == R.id.nav_passager) {
-
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_propositionTrajetHeure) {
+            Intent intent = new Intent(MainActivity.this, PropositionTrajetActivity.class);
+            startActivity(intent);
+            finish();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_signout) {
