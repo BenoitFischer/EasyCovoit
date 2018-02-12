@@ -127,6 +127,9 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
             finish();
         } else if (id == R.id.nav_rechercheTrajet) {
+            Intent intent = new Intent(MainActivity.this, RechercheTrajetActivity.class);
+            startActivity(intent);
+            finish();
 
         } else if (id == R.id.nav_propositionTrajetHeure) {
             Intent intent = new Intent(MainActivity.this, PropositionTrajetActivity.class);
