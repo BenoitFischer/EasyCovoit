@@ -43,7 +43,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_proposition_trajet);
+        setContentView(R.layout.activity_proposition_trajet2);
 
         DateHeure = (EditText) findViewById(R.id.editDate);
         LieuDepart = (EditText) findViewById(R.id.editLieuDepart);
@@ -69,7 +69,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
         }
 
 
-        currentUserNameDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Prenom");
+        currentUserNameDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Informations Personnelles").child("Prenom");
         //trajetDataBase
 
         currentUserNameDatabase.addValueEventListener(new ValueEventListener()
@@ -89,7 +89,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
             }
         });
 
-        currentUserLastNameDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Nom");
+        currentUserLastNameDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Informations Personnelles").child("Nom");
 
         currentUserLastNameDatabase.addValueEventListener(new ValueEventListener()
         {
@@ -107,7 +107,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
             }
         });
 
-        currentUserGenreDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Genre");
+        currentUserGenreDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Informations Personnelles").child("Genre");
 
         currentUserGenreDatabase.addValueEventListener(new ValueEventListener()
         {
@@ -150,7 +150,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
 
         mRootRef = FirebaseDatabase.getInstance().getReference();
         if(mRootRef !=null){
-            mTrajetRef = mRootRef.child("TrajetHeure");
+            mTrajetRef = mRootRef.child("Trajet Date");
             mDateRef = mTrajetRef.child(strDate);
 
             if(mDateRef!=null && nbTrajetExistants==0){
@@ -275,7 +275,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
                         strDate = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
-                        FirebaseDatabase.getInstance().getReference().child("TrajetHeure").child(strDate).addValueEventListener(new ValueEventListener() {
+                        FirebaseDatabase.getInstance().getReference().child("Trajet Date").child(strDate).addValueEventListener(new ValueEventListener() {
                             @Override
 
                             public void onDataChange(DataSnapshot dataSnapshot) {

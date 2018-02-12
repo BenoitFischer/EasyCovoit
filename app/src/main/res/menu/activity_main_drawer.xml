@@ -13,10 +13,6 @@
             android:icon="@drawable/ic_directions_car_black_24dp"
             android:title="Proposer un trajet" />
         <item
-            android:id="@+id/nav_propositionTrajetHeure"
-            android:icon="@drawable/ic_directions_car_black_24dp"
-            android:title="Proposer un trajet 2" />
-        <item
             android:id="@+id/nav_rechercheTrajet"
             android:icon="@drawable/ic_directions_car_black_24dp"
             android:title="Rechercher un trajet" />

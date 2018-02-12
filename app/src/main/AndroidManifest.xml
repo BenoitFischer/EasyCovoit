@@ -26,7 +26,6 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ResetPasswordActivity" />
-        <activity android:name=".PropositionTrajet" />
         <activity android:name=".RechercheTrajetActivity" />
         <activity android:name=".ResultatRechercheTrajetActivity" />
         <activity android:name=".PropositionTrajetActivity"></activity>

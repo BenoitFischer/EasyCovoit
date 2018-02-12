@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
             finish();
         } else if (id == R.id.nav_propositionTrajet) {
-            Intent intent = new Intent(MainActivity.this, PropositionTrajet.class);
+            Intent intent = new Intent(MainActivity.this, PropositionTrajetActivity.class);
             startActivity(intent);
             finish();
         } else if (id == R.id.nav_rechercheTrajet) {
@@ -131,10 +131,6 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
             finish();
 
-        } else if (id == R.id.nav_propositionTrajetHeure) {
-            Intent intent = new Intent(MainActivity.this, PropositionTrajetActivity.class);
-            startActivity(intent);
-            finish();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_signout) {
