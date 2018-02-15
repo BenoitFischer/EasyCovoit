@@ -81,7 +81,6 @@
         android:layout_below="@+id/edArrivee"
         android:ems="10"
         android:focusable="false"
-        android:inputType="textPersonName"
-        android:text="@string/demain" />
+        android:inputType="textPersonName" />
 
 </RelativeLayout>

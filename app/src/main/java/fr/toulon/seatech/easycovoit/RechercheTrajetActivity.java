@@ -1,64 +1,40 @@
 package fr.toulon.seatech.easycovoit;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
+import java.util.ArrayList;
 import java.util.Calendar;
 
-import static android.opengl.Matrix.length;
-import static java.lang.Thread.sleep;
 
-/*
-Trajet
-	date
-		trajet1
-			informations de trajet
-				-de
-				=ou
-				-heure
-				-date
-			informations de conducteur
-				-genre
-				-
-				-
-			information de passagers
-				-passager1
-					-genre
-					-nom
-					-age
-				-passager2
-					-genre
-					-nom
-					-age
-*/
-public class RechercheTrajetActivity extends AppCompatActivity  implements View.OnClickListener {
+public class RechercheTrajetActivity extends AppCompatActivity {
 
     private static final String TAG = "";
 
-    Button btnRcherche;
+    Button btnRecherche;
     EditText editTextDepart, editTextArrivee, editTextDate;
-    String strDate, strDepart, strArrivee, strHeure, strGenreConducteur, strNomConducteur, strPrenomConducteur, strNbPlacesRestantes, strDateTrajetListener;
-    String strDepartRecherche ="Pas de départ indiqué", strArriveRecherche, strDateRecherche;
+    String strDate, strDepart, strArrivee, strNbPlacesRestantes;
+    String strDepartRecherche ="Pas de départ indiqué", strArriveRecherche;
     int mAnnee, mMois, mJour;
     long nbTrajetExistants;
     DatabaseReference refTrajet, refDateTrajet;
+    ArrayList listTrajetDepart, listTrajetArrive, listNbPlaces, listTrajetTrouve;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,128 +43,208 @@ public class RechercheTrajetActivity extends AppCompatActivity  implements View.
 
         refTrajet =  FirebaseDatabase.getInstance().getReference().child("Trajet Date");
 
-        btnRcherche = findViewById(R.id.btnRechercherTrajet);
+        btnRecherche = findViewById(R.id.btnRechercherTrajet);
+        editTextDepart = findViewById(R.id.edDepart);
+        editTextArrivee = findViewById(R.id.edArrivee);
+        editTextDate = findViewById(R.id.edDate);
 
-        editTextDepart = (EditText) findViewById(R.id.edDepart);
-        editTextArrivee = (EditText) findViewById(R.id.edArrivee);
-        editTextDate = (EditText) findViewById(R.id.edDate);
-
-        editTextDepart.setOnClickListener(onClickArriveListener);
+        editTextDepart.setOnClickListener(onClickDepartListener);
+        editTextArrivee.setOnClickListener(onClickArriveListener);
         editTextDate.setOnClickListener(onClickDateListener);
-
-        btnRcherche.setOnClickListener(onClickBouton);
-
-        //setNbTrajetExistants();
-
-
-
-
+        btnRecherche.setOnClickListener(onClickBouton);
 
     }
 
 
-    public void onClick(View view) {
-
-        Log.v (" ########", "Je suis ici");
-        ViewGroup groupLayout = (ViewGroup)view.getParent();
-        ScrollView scroll = new ScrollView(this);
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-
-        TextView tvConducteur = new TextView(this);
-        tvConducteur.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        tvConducteur.setText(strGenreConducteur + " " + strPrenomConducteur + " " +strNomConducteur);
-        groupLayout.addView(tvConducteur);
-
-
-        scroll.addView(layout);
-        setContentView(scroll);
-    }
-
-    /*
-    // Récupération du nombre de trajet par date
-    refTrajet.addListenerForSingleValueEvent(new ValueEventListener() {
+    private View.OnClickListener onClickDepartListener = new View.OnClickListener() {
         @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            Log.v("##########:", "data changed");
-            nbTrajetExistants = dataSnapshot.getChildrenCount();
-
-            String strMatchedIDTrajet[];
-            Log.v("Nb trajet existant:", String.valueOf(nbTrajetExistants));
-            // pour chaque trajet existant, verifier si la date correspond à la date de la recherche et stocker le nom du trajet
-            for (int i = 0; i < nbTrajetExistants; ++i) {
-                strDate = getDateTrajet(i+1);
-                Log.v("Date trajet" + String.valueOf(i+1) +" : ", strDate+"");
-            }
-
-
-
+        public void onClick(View view) {
+            editTextDepart = findViewById (R.id.edDepart);
+            strDepartRecherche = editTextDepart.getText().toString().toLowerCase();
         }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
-    });
-
-*/
+    };
 
     private View.OnClickListener onClickArriveListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            strDepartRecherche = editTextDepart.getText().toString();
-            Log.v("lieu départ recherché", strDepartRecherche);
+            editTextArrivee = findViewById (R.id.edArrivee);
+            strArriveRecherche = editTextArrivee.getText().toString().toLowerCase();
         }
     };
 
     private View.OnClickListener onClickDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            // Toast : Remplir les champs svp
+            if((strDepartRecherche == null) || (strArriveRecherche == null) ){
+
+                Context context = getApplicationContext();
+                CharSequence text = "Vous devez remplir les champs Départ et Arrivé Avant de choisir la date !";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast.makeText(context, text, duration).show();
+                return;
+            }
             datePicker();
 
         }
+
     };
 
+
     private View.OnClickListener onClickBouton = new View.OnClickListener() {
+
         @Override
-        public void onClick(View view) {
+        public void onClick(View view){
 
 
-            String[][] strTableauInfoTrajet = tableauInfoTrajet();
+            // Toast : Remplir les champs svp
+            if((strDepartRecherche == null) || (strArriveRecherche == null) || (strDate == null) ){
 
-            for(int i = 0; i<nbTrajetExistants; i++)
-            {
-                Log.v("Trajet"+String.valueOf(i+1),"Départ est "+strTableauInfoTrajet[i][0]);
+                Context context = getApplicationContext();
+                CharSequence text = "Vous devez remplir les champs pour lancer une recherche !";
+                int duration = Toast.LENGTH_SHORT;
 
-                if (strTableauInfoTrajet[i][0] == strDepartRecherche)
+                Toast.makeText(context, text, duration).show();
+                return;
+            }
+
+            // instanciation de la list des trajets trouvés
+            listTrajetTrouve = new ArrayList <String> ((int) nbTrajetExistants);
+
+            // pour le nombre de trajets trouvé à cette date (nombre maximum de résultat possible)
+            for (int i = 0; i < (int) nbTrajetExistants+1; i++) {
+                // si les list on encore des éléments a la i eme place
+                if( i < listNbPlaces.size() && i < listTrajetArrive.size() && i < listTrajetDepart.size())
                 {
-                    Log.v("Vous avez trouvé ", "hourra !!!!");
-                }
-                else{
-                    Log.v("Il ne correspond pas", "Bouuuh !!!!");
+                    //Si il y a de la place dans le trajet, si le départ correspond et si l'arrivée correspond
+                    if (listNbPlaces.get(i).equals(listTrajetArrive.get(i))
+                            && listNbPlaces.get(i).equals(listTrajetDepart.get(i)))
+                    {
+                        // ajout de l'élement dans la list des trajet trouvés
+                        listTrajetTrouve.add(String.valueOf(i + 1));
+                        Log.v("élément list", String.valueOf(listTrajetTrouve.get(i)));
+                    }
                 }
             }
 
+            // Toast : Résultat(s) trouvé(s) !
+            if (listTrajetTrouve.isEmpty() == false){
+                Context context = getApplicationContext();
+                CharSequence text = "Nous avons trouvé des trajets qui pourraient vous intéressez !";
+                int duration = Toast.LENGTH_SHORT;
 
+                Toast.makeText(context, text, duration).show();
 
+                //Ouvre l'activity en transferant la date et la liste des trajets trouvés
+                Intent intent = new Intent(RechercheTrajetActivity.this, ResultatRechercheTrajetActivity.class);
+                intent.putExtra("Date", strDate);
+                intent.putExtra("listTrajet", listTrajetTrouve);
+                startActivity(intent);
+            }
+
+            // Toast : Aucun résultat
+            if (listTrajetTrouve.isEmpty() == true){
+                Context context = getApplicationContext();
+                CharSequence text = "Aucun résultat ne correspond à votre recherche !";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast.makeText(context, text, duration).show();
+                return;
+            }
         }
 
     };
 
 
-    private String[][] tableauInfoTrajet() {
-        Log.v("Nb trajet (valeur de i)", String.valueOf(nbTrajetExistants));
-        // pour chaque trajet existant à la date demandée
+    private void rechercheTrajet(){
 
-        String[][] strInfoTrajet = new String [(int) nbTrajetExistants][7];
+        // j'instancie un tableau de taille équivalente au nombre de trajet existant pour qu'il y pas de soucis de taille
+        // Ce tableau va récupérer tout les numéros de trajet avec le même lieu de départ que celui recherché
+        listTrajetDepart = new ArrayList((int)nbTrajetExistants);
+        // Ce tableau va récupérer tout les numéros de trajet avec le même lieu d'arrivé que celui recherché
+        listTrajetArrive = new ArrayList((int)nbTrajetExistants);
+        // Ce tableau va récupérer les places restantes par trajet
+        listNbPlaces = new ArrayList((int)nbTrajetExistants);
 
-        for (int i = 0; i < nbTrajetExistants; ++i) {
-            strInfoTrajet[i] = donneesTrajet(i, strDate);
+        //Pour le nombre de trajet existant à cette date
+        for (int i = 1; i < (int) nbTrajetExistants+1; i++) {
+
+            // je crée un compteur final équivalent à i pour qu'il puisse être utilisé dans le onDataChange
+            final int numéroTrajet = i;
+
+
+            // récupération du lieu de départ du trajet
+            refTrajet.child(strDate).child("Trajet " + String.valueOf(i)).child("Informations du trajet").child("Lieu de départ").addValueEventListener(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    strDepart = dataSnapshot.getValue(String.class).toLowerCase();
+
+                    //Si le lieu de départ rechérché est le même que le lieu de départ du trajet numéro i
+                    //Je stocke le numéro du trajet dans le tableau
+                    if (strDepart.equals(strDepartRecherche)) {
+                        listTrajetDepart.add(String.valueOf(numéroTrajet));
+                        Log.v("Trajet correspondant ", "trouvé ! Trajet numéro"+ String.valueOf(numéroTrajet) );
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            // récupération du lieu d'arrivé du trajet
+            refTrajet.child(strDate).child("Trajet " + String.valueOf(i)).child("Informations du trajet").child("Lieu d'arrivée").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    strArrivee = dataSnapshot.getValue(String.class).toLowerCase();
+
+                    //Si le lieu d'arrivé rechérché est le même que le lieu d'arrivé du trajet numéro i
+                    //Je stocke le numéro du trajet dans le tableau
+                    if (strArrivee.equals(strArriveRecherche)) {
+                        listTrajetArrive.add(String.valueOf(numéroTrajet));
+                        Log.v("Trajet correspondant ", "trouvé ! Trajet numéro" + String.valueOf(numéroTrajet));
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "Failed to read value.");
+                }
+            });
+
+            // récupération du nombre de places restantes du trajet
+            refTrajet.child(strDate).child("Trajet " + String.valueOf(i)).child("Informations du trajet").child("Nombre de places restantes").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    strNbPlacesRestantes = dataSnapshot.getValue(String.class);
+
+                    //Si le nombre de place restante du trajet numéro i est non nul
+                    //Je stocke le numéro du trajet dans le tableau
+                    if (!strNbPlacesRestantes.equals("0")) {
+                        listNbPlaces.add(String.valueOf(numéroTrajet));
+                        Log.v("Trajet correspondant ", "trouvé ! Trajet numéro"+ String.valueOf(numéroTrajet) );
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "Failed to read value.");
+                }
+            });
+
+
         }
-        return strInfoTrajet;
+
     }
 
+
     private void datePicker() {
+
         // Get Current Date
         final Calendar c = Calendar.getInstance();
         // set le champ de la date à la date actuelle
@@ -207,7 +263,6 @@ public class RechercheTrajetActivity extends AppCompatActivity  implements View.
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         strDate = dayOfMonth + "-" + (monthOfYear + 1 ) + "-" + year;
                         editTextDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                        Log.v ("La date recherchée est ",strDate);
                         refDateTrajet = FirebaseDatabase.getInstance().getReference().child("Trajet Date").child(strDate);
                         refDateTrajet.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -217,6 +272,8 @@ public class RechercheTrajetActivity extends AppCompatActivity  implements View.
                                 // Récupère le nombre de trajet correspondants à la date
                                 setNbTrajetExistants(dataSnapshot.getChildrenCount());
                                 Log.v("nb de trajet à date est", String.valueOf(nbTrajetExistants));
+
+                                rechercheTrajet();
                             }
 
                             @Override
@@ -232,165 +289,8 @@ public class RechercheTrajetActivity extends AppCompatActivity  implements View.
 
     }
 
-    // Fonction récupérant les données d'un trajet à une date donnée
-    private String[] donneesTrajet(int numeroTrajet, String strDate) {
-
-        numeroTrajet = numeroTrajet +1; // les trajets sont triées à partir de 1, les i commencent à 0
-        final String[] infosTrajet = new String[7];
-
-        refTrajet.child(strDate).child("Trajet " + String.valueOf(numeroTrajet)).child("Informations du trajet").child("Lieu de départ").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                strDepart = dataSnapshot.getValue(String.class);
-                if (strDepart != null) {
-
-                    infosTrajet[0] = strDepart;
-                    Log.v("Depart ",  infosTrajet[0]);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "Failed to read value.");
-            }
-        });
-
-        refTrajet.child(strDate).child("Trajet " + String.valueOf(numeroTrajet)).child("Informations du trajet").child("Lieu d'arrivée").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                strArrivee = dataSnapshot.getValue(String.class);
-                if (strArrivee != null) {
-                    Log.v("Arrivee ", strArrivee);
-                    infosTrajet[1] = strArrivee;
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "Failed to read value.");
-            }
-        });
-
-        refTrajet.child(strDate).child("Trajet " + String.valueOf(numeroTrajet)).child("Informations du trajet").child("Heure").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                strHeure = dataSnapshot.getValue(String.class);
-                if (strHeure != null) {
-                    Log.v("Heure ", strHeure);
-                    infosTrajet[2] = strHeure;
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "Failed to read value.");
-            }
-        });
-
-        refTrajet.child(strDate).child("Trajet " + String.valueOf(numeroTrajet)).child("Informations du trajet").child("Nombre de places restantes").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                strNbPlacesRestantes = dataSnapshot.getValue(String.class);
-                if (strNbPlacesRestantes != null) {
-                    Log.v("NbPlacesRestantes ", strNbPlacesRestantes);
-                    infosTrajet[3] = strNbPlacesRestantes;
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "Failed to read value.");
-            }
-        });
-
-        refTrajet.child(strDate).child("Trajet " + String.valueOf(numeroTrajet)).child("Informations du conducteur").child("Genre").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                strGenreConducteur = dataSnapshot.getValue(String.class);
-                if (strGenreConducteur != null) {
-                    Log.v("Genre conducteur ", strGenreConducteur);
-                    infosTrajet[4] = strGenreConducteur;
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "Failed to read value.");
-            }
-        });
-
-        refTrajet.child(strDate).child("Trajet " + String.valueOf(numeroTrajet)).child("Informations du conducteur").child("Nom").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                strNomConducteur = dataSnapshot.getValue(String.class);
-                if (strNomConducteur != null) {
-                    Log.v("Nom conducteur ", strNomConducteur);
-                    infosTrajet[5] = strNomConducteur;
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "Failed to read value.");
-            }
-        });
-
-        refTrajet.child(strDate).child("Trajet " + String.valueOf(numeroTrajet)).child("Informations du conducteur").child("Prenom").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                strPrenomConducteur = dataSnapshot.getValue(String.class);
-                if (strPrenomConducteur != null) {
-                    Log.v("Prénom du conducteur ", strPrenomConducteur);
-                    infosTrajet[6] = strPrenomConducteur;
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "Failed to read value.");
-            }
-        });
-        Log.v("Info trajet", "est"+infosTrajet[0]);
-        return infosTrajet;
-    }
-
-
-    public long getNbTrajetExistants() {
-        return nbTrajetExistants;
-    }
-
     public void setNbTrajetExistants(long nbTrajet) {
         this.nbTrajetExistants = nbTrajet;
-    }
-
-    public String getDateTrajet(int i) {
-        final String[] str = new String[1];
-        Log.v ("i = ",String.valueOf(i));
-        Log.v("str[0]", str[0] + "");
-        refTrajet.child("Trajet " + String.valueOf(i)).child("Informations du trajet").child("Date").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                strDateTrajetListener = dataSnapshot.getValue().toString();
-                Log.v ("Date du trajet",strDateTrajetListener+"");
-                str[0] = strDateTrajetListener;
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-        });
-        // la valeur est retournée avant qu'elle soit modifiée ... ?!
-        Log.v("str[0]", str[0] + "");
-        return str[0];
     }
 
 }
