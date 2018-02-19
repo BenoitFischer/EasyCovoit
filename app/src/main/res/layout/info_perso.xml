@@ -11,10 +11,19 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/titreInfoPerso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:text="@string/titreInfoPerso" />
+
+            <TextView
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Titre"
+                android:text="@string/titre_personne"
+                android:layout_marginTop="60dp"
                 android:layout_gravity="center_horizontal"/>
 
             <Spinner
@@ -24,25 +33,25 @@
                 android:layout_gravity="center_horizontal" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/tvPrenom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Prénom"
+                android:text="@string/prenom"
                 android:layout_gravity="center_horizontal"/>
 
             <EditText
                 android:id="@+id/prenomText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:layout_gravity="center_horizontal"/>
+                android:inputType="textPersonName" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tvNom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nom"
+                android:text="@string/nom"
                 android:layout_gravity="center_horizontal"/>
 
             <EditText
@@ -55,10 +64,10 @@
                 android:layout_gravity="center_horizontal"/>
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/tvLieuTravail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lieu de travail"
+                android:text="@string/lieu_travail"
                 android:layout_gravity="center_horizontal"/>
 
             <EditText
@@ -70,10 +79,10 @@
                 android:layout_gravity="center_horizontal"/>
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/tvLieuDomicile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lieu de domicile"
+                android:text="@string/lieu_habitat"
                 android:layout_gravity="center_horizontal"/>
 
             <EditText
@@ -85,14 +94,14 @@
                 android:layout_gravity="center_horizontal"/>
 
             <TextView
-                android:id="@+id/textView11"
+                android:id="@+id/tvNumeroTel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/numeroTel"
                 android:layout_gravity="center_horizontal"/>
 
             <EditText
-                android:id="@+id/numTelText"
+                android:id="@+id/numTelEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -100,12 +109,16 @@
                 android:layout_gravity="center_horizontal"/>
 
             <Button
-                android:id="@+id/valider"
+                android:id="@+id/btn_valider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="15dp"
-                android:text="Valider"
-                android:layout_gravity="center_horizontal"/>
+                android:text="@string/btn_valider" />
+
+
+
+
 
         </LinearLayout>
     </ScrollView>

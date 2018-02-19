@@ -7,32 +7,19 @@
         <item
             android:id="@+id/nav_info_perso"
             android:icon="@drawable/ic_account_circle_black_24dp"
-            android:title="Informations personnelles" />
+            android:title="@string/main_info_perso" />
         <item
             android:id="@+id/nav_propositionTrajet"
             android:icon="@drawable/ic_directions_car_black_24dp"
-            android:title="Proposer un trajet" />
+            android:title="@string/main_proposer_trajet" />
         <item
             android:id="@+id/nav_rechercheTrajet"
-            android:icon="@drawable/ic_directions_car_black_24dp"
-            android:title="Rechercher un trajet" />
+            android:icon="@drawable/ic_search_black_24dp"
+            android:title="@string/main_rechercher_trajet" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_signout"
+            android:icon="@drawable/ic_power_settings_new_black_24dp"
+            android:title="@string/deconnexion" />
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_signout"
-                android:icon="@drawable/ic_power_settings_new_black_24dp"
-                android:title="@string/deconnexion" />
-        </menu>
-    </item>
 
 </menu>

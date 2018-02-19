@@ -1,30 +1,100 @@
 <resources>
-    <string name="app_name">EasyCovoit</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_settings">Settings</string>
+    <!--
+            activity_login.xml
+    -->
     <string name="view_email">Email :</string>
     <string name="view_pwd">Password :</string>
-    <string name="btn_reset">Forgot Password</string>
     <string name="btn_login">Login</string>
-    <string name="hint_email">Email</string>
     <string name="btn_signup">Sign Up</string>
-    <string name="btn_reset_password">Reset Password</string>
-    <string name="btn_back"><![CDATA[<< Back]]></string>
-    <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
-    <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
-    <string name="signOut">Sign Out</string>
-    <string name="main_auth_succes">You\'re successfully connected !!</string>
-    <string name="lbl_forgot_password">Forgot password?</string>
-    <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
-    <string name="deconnexion">Se déconnecter></string>
-    <string name="conducteur">Conducteur :</string>
+    <string name="btn_reset">Forgot Password</string>
+
+    <!--
+            activity_main.xml
+    -->
+
+    <!--
+            activity_proposition_trajet2.xml
+    -->
+    <string name="titrePropositionTrajet1"><Big><b><font size="20">Proposez un trajet </font></b></Big></string>
+    <string name="titrePropositionTrajet2"><Big><b><font size="20">et</font></b></Big></string>
+    <string name="titrePropositionTrajet3"><Big><b><font size="20">trouvez des passagers</font></b></Big></string>
     <string name="depart">Lieu de départ :</string>
     <string name="arrivee">Lieu d\'arrivée :</string>
-    <string name="dateHeure">Date et heure:</string>
-    <string name="proposer">Proposer le trajet!</string>
-    <string name="nbPlaceDispo">Nombre de places proposé :</string>
-    <string name="numeroTel">Numéro de telephone</string>
+    <string name="dateHeure_propose">Date et heure:</string>
+    <string name="btn_proposer">Proposer le trajet!</string>
+    <string name="nbPlaceDispo">Nombre de places proposées :</string>
+
+    <!--
+            activity_recherche_trajet.xml
+    -->
+    <string name="titreRechercherTrajet"><Big><b><font size="20">Recherchez un trajet </font></b></Big></string>
     <string name="date">Date :</string>
+    <string name="btn_rechercher_trajet">Rechercher</string>
+
+    <!--
+            activity_reset_password.xml
+    -->
+    <string name="lbl_forgot_password">Forgot password?</string>
+    <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
+    <string name="btn_reset_password">Reset Password</string>
+    <string name="btn_back"><![CDATA[<< Back]]></string>
+    <string name="hint_email">Email</string>
+
+
+    <!--
+            activity_resultat_recherche_trajet.xml
+    -->
+
+    <!--
+            activity_signup.xml
+    -->
+
+    <!--
+            content_main.xml
+    -->
+    <string name="MessageAccueil1"><font color='black'>Bienvenue sur EasyCovoit !</font> </string>
+    <string name="MessageAccueil2"><font color='black'>Trouver des covoitureurs avec qui faire la route !</font></string>
+
+    <!--
+            info_perso.xml
+    -->
+    <string name="titreInfoPerso"><Big><b><u><font size="24">Vos informations personnelles </font></u></b></Big></string>
+    <string name="titre_personne">Titre</string>
+    <string name="prenom">Prénom</string>
+    <string name="nom">Nom</string>
+    <string name="lieu_habitat">Lieu de domicile</string>
+    <string name="lieu_travail">Lieu de travail</string>
+    <string name="numeroTel">Numéro de telephone</string>
+    <string name="btn_valider">Valider</string>
+
+
+    <!--
+            activity_main_drawer.xml
+    -->
+    <string name="main_info_perso">Informations personnelles</string>
+    <string name="main_proposer_trajet">Proposer un trajet</string>
+    <string name="main_rechercher_trajet">Rechercher un trajet</string>
+    <string name="deconnexion">Se déconnecter></string>
+
+    <!--
+            MainActivity
+    -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+    <!--
+            LoginActivity
+    -->
+    <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
+    <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
+
+    <!--
+            AndroidManifest.xml
+    -->
+    <string name="app_name">EasyCovoit</string>
+
+
+
 </resources>

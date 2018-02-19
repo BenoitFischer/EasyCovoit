@@ -56,7 +56,7 @@ public class InfoPerso extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.info_perso);
-        bValider = (Button) findViewById(R.id.valider);
+        bValider = (Button) findViewById(R.id.btn_valider);
 
         // Read datas from the database
 
@@ -74,11 +74,15 @@ public class InfoPerso extends AppCompatActivity {
             Log.d(TAG,"No user signed in");
         }
 
-        // récupère la database de firebase
+        // récupère le path de la database de firebase
         mRootRef = FirebaseDatabase.getInstance().getReference();
         if (mRootRef != null) {
+
+            // Créer l'arbre "Users" de la base de données
             mUserRef = mRootRef.child("Users");
             mIDRef = mUserRef.child(uid);
+
+            // Créer l'arbre "Informations personnelles" de la base de données
             mInfoPersoRef = mIDRef.child("Informations Personnelles");
             mChildGenre = mInfoPersoRef.child("Genre");
             mChildNom = mInfoPersoRef.child("Nom");
@@ -117,6 +121,10 @@ public class InfoPerso extends AppCompatActivity {
                 }
             });
 
+            /*---
+                    Listeners des informations de l'users pour récupérer ses infos (si déjà remplis)
+            ---*/
+            // listener du nom de l'user
             mChildNom.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -133,6 +141,7 @@ public class InfoPerso extends AppCompatActivity {
                 }
             });
 
+            // listener du prénom de l'user
             mChildPrenom.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -149,6 +158,7 @@ public class InfoPerso extends AppCompatActivity {
                 }
             });
 
+            // listener du lieu de domicile de l'user
             mChildHabitation.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -165,6 +175,7 @@ public class InfoPerso extends AppCompatActivity {
                 }
             });
 
+            // listener du lieu de travail de l'user
             mChildBoulot.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
