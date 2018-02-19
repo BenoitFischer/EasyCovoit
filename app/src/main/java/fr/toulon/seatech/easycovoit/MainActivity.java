@@ -121,23 +121,19 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_info_perso) {
             Intent i = new Intent(MainActivity.this, InfoPerso.class);
             startActivity(i);
-            finish();
         } else if (id == R.id.nav_propositionTrajet) {
             Intent intent = new Intent(MainActivity.this, PropositionTrajetActivity.class);
             startActivity(intent);
-            finish();
         } else if (id == R.id.nav_rechercheTrajet) {
             Intent intent = new Intent(MainActivity.this, RechercheTrajetActivity.class);
             startActivity(intent);
-            finish();
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_test) {
 
         } else if (id == R.id.nav_signout) {
             signOut();
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
-            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

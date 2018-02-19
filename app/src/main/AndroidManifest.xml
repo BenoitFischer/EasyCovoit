@@ -28,7 +28,8 @@
         <activity android:name=".ResetPasswordActivity" />
         <activity android:name=".RechercheTrajetActivity" />
         <activity android:name=".ResultatRechercheTrajetActivity" />
-        <activity android:name=".PropositionTrajetActivity"></activity>
+        <activity android:name=".PropositionTrajetActivity" />
+        <activity android:name=".TrajetActivity"></activity>
     </application>
 
 </manifest>

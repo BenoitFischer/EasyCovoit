@@ -56,6 +56,7 @@ public class InfoPerso extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.info_perso);
+        setTitle("Informations personnelles");
         bValider = (Button) findViewById(R.id.valider);
 
         // Read datas from the database

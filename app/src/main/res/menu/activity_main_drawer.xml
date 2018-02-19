@@ -17,7 +17,7 @@
             android:icon="@drawable/ic_directions_car_black_24dp"
             android:title="Rechercher un trajet" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_test"
             android:icon="@drawable/ic_menu_manage"
             android:title="Tools" />
     </group>

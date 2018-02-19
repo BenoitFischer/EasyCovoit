@@ -40,7 +40,7 @@ public class RechercheTrajetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recherche_trajet);
-
+        setTitle("Recherche de trajets");
         refTrajet =  FirebaseDatabase.getInstance().getReference().child("Trajet Date");
 
         btnRecherche = findViewById(R.id.btnRechercherTrajet);
@@ -252,7 +252,6 @@ public class RechercheTrajetActivity extends AppCompatActivity {
         mMois = c.get(Calendar.MONTH);
         mJour = c.get(Calendar.DAY_OF_MONTH);
 
-
         //DatePickerDialog(Context context, DatePickerDialog.OnDateSetListener listener, int year, int month, int dayOfMonth)
         //Creates a new date picker dialog for the specified date using the parent context's default date picker dialog theme.
 
@@ -280,7 +279,6 @@ public class RechercheTrajetActivity extends AppCompatActivity {
                             public void onCancelled(DatabaseError databaseError) {
 
                             }
-
                         });
                     }
                 }, mAnnee, mMois, mJour);

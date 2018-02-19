@@ -44,7 +44,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_proposition_trajet2);
-
+        setTitle("Proposer un trajet");
         DateHeure = (EditText) findViewById(R.id.editDate);
         LieuDepart = (EditText) findViewById(R.id.editLieuDepart);
         LieuArrivee = (EditText) findViewById(R.id.editLieuArrivee);
@@ -69,8 +69,8 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
         }
 
 
+        //Récupération du nom d'utilisateur actuel en base de données
         currentUserNameDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Informations Personnelles").child("Prenom");
-        //trajetDataBase
 
         currentUserNameDatabase.addValueEventListener(new ValueEventListener()
         {
@@ -88,7 +88,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
                 Log.w(TAG, "Failed to read value.");
             }
         });
-
+        //Récupération du prénom d'utilisateur actuel en base de données
         currentUserLastNameDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Informations Personnelles").child("Nom");
 
         currentUserLastNameDatabase.addValueEventListener(new ValueEventListener()
@@ -106,7 +106,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
                 Log.w(TAG, "Failed to read value.");
             }
         });
-
+        //Récupération du genre d'utilisateur actuel en base de données
         currentUserGenreDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Informations Personnelles").child("Genre");
 
         currentUserGenreDatabase.addValueEventListener(new ValueEventListener()
@@ -127,6 +127,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
 
     }
 
+    // listener du champ de saisi pour la date et heure du trajet à proposer
     private View.OnClickListener edDateHeure = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -136,9 +137,6 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
 
     @Override
     public void onClick(View v) {
-
-
-
         //-- Stockage d'une proposition de trajet
 
         //Stockage du lieu de départ, du lieu de d'arrivée, du nombre de place proposé
@@ -152,7 +150,8 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
         if(mRootRef !=null){
             mTrajetRef = mRootRef.child("Trajet Date");
             mDateRef = mTrajetRef.child(strDate);
-
+            //vérification d'existence du 'parent' de la date du trajet et ajout du premier trajet pour cette date si aucun 'child'
+            //existe
             if(mDateRef!=null && nbTrajetExistants==0){
                 mIDTrajet = mDateRef.child("Trajet " + String.valueOf(1));
 
@@ -184,10 +183,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
                     mPrenomPassager.setValue("");
                 }
             }
-            //if(getNbTrajetExistants()==0){
-            //    Log.v("nbTrajetsExistants==0:", String.valueOf(getNbTrajetExistants()));
-
-            //}
+            //vérification d'existence du 'parent' de la date du trajet et ajout trajet pour cette date
             else if(mDateRef!=null && nbTrajetExistants>0){
                 Log.v("nbTrajetsExistants>0:", String.valueOf(nbTrajetExistants));
                 mIDTrajet = mDateRef.child("Trajet " + String.valueOf(++nbTrajetExistants));
@@ -227,7 +223,6 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
 
         Log.v("nbTrajetsExistants:", String.valueOf(getNbTrajetExistants()));
 
-
         // Ecriture dans la base de donnée
         mIDCovoitureur.setValue(uid);
         mPrenomCovoitureur.setValue(strPrenomCovoitureur);
@@ -264,7 +259,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
         //DatePickerDialog(Context context, DatePickerDialog.OnDateSetListener listener, int year, int month, int dayOfMonth)
         //Creates a new date picker dialog for the specified date using the parent context's default date picker dialog theme.
 
-        //Get yesterday's date
+        //Get yesterday's date to disable previous dates when user pick a date
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1);
 
@@ -324,7 +319,8 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
     }
 
     private String updateTime(int hours, int mins) {
-
+        //if user choose for example 13H5 on timePickerDialog, this fonction add a '0' prefixe for the minute indicator
+        //so time choosen becomes 13h05
         String minutes = "";
         if (mins < 10)
             minutes = "0" + mins;
