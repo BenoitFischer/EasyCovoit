@@ -57,7 +57,7 @@ public class InfoPerso extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.info_perso);
         bValider = (Button) findViewById(R.id.valider);
-
+        setTitle("Informations personnelles");
         // Read datas from the database
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

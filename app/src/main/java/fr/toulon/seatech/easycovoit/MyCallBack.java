@@ -8,6 +8,7 @@ import java.util.List;
  */
 
 public interface MyCallBack {
+
     public void onCallback(ArrayList<ArrayList<String>> value);
     public void TrajetActivityCallback(ArrayList value);
 }

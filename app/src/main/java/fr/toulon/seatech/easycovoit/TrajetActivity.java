@@ -30,6 +30,7 @@ public class TrajetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trajet);
+
         setTitle("Détails du trajet correspondant");
 
         //Get le bundle envoyé par l'intent qui appelle cette activité

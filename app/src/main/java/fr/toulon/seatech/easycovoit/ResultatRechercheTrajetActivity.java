@@ -37,6 +37,7 @@ public class ResultatRechercheTrajetActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resultat_recherche_trajet);
+
         setTitle("Résultats de trajet correspondant");
 
         //Get le bundle envoyé par l'intent qui appelle cette activité

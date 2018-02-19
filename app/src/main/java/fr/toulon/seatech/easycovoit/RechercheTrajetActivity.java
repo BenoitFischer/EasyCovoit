@@ -40,6 +40,7 @@ public class RechercheTrajetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recherche_trajet);
+
         setTitle("Recherche de trajets");
         refTrajet =  FirebaseDatabase.getInstance().getReference().child("Trajet Date");
 

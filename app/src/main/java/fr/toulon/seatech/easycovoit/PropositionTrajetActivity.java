@@ -40,7 +40,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_proposition_trajet2);
-
+        setTitle("Proposer un trajet");
         DateHeure = findViewById(R.id.editDate);
         LieuDepart = findViewById(R.id.editLieuDepart);
         LieuArrivee = findViewById(R.id.editLieuArrivee);
