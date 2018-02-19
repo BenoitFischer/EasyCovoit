@@ -31,12 +31,11 @@ public class SignupActivity extends AppCompatActivity {
         //Get Firebase auth instance
         mAuth = FirebaseAuth.getInstance();
 
-        btnSignIn = (Button) findViewById(R.id.btn_loginSU);
-        btnSignUp = (Button) findViewById(R.id.btn_newUserSU);
-        inputEmail = (EditText) findViewById(R.id.emailSU);
-        inputPassword = (EditText) findViewById(R.id.pwdSU);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        btnResetPassword = (Button) findViewById(R.id.btn_resetSU);
+        btnSignUp = findViewById(R.id.btn_newUserSU);
+        inputEmail = findViewById(R.id.emailSU);
+        inputPassword = findViewById(R.id.pwdSU);
+        progressBar = findViewById(R.id.progressBar);
+        btnResetPassword = findViewById(R.id.btn_resetSU);
 
         btnResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override

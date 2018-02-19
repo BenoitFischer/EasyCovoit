@@ -84,7 +84,6 @@ public class RechercheTrajetActivity extends AppCompatActivity {
                 CharSequence text = "Vous devez remplir les champs Départ et Arrivé Avant de choisir la date !";
                 int duration = Toast.LENGTH_SHORT;
                 Toast.makeText(context, text, duration).show();
-                return;
             }
             // si les champs sont bien remplis
             else{
@@ -110,7 +109,6 @@ public class RechercheTrajetActivity extends AppCompatActivity {
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast.makeText(context, text, duration).show();
-                return;
             }
 
             else {
@@ -133,7 +131,7 @@ public class RechercheTrajetActivity extends AppCompatActivity {
                 }
 
                 // Toast : Résultat(s) trouvé(s) !
-                if (listTrajetTrouve.isEmpty() == false) {
+                if (!listTrajetTrouve.isEmpty()) {
                     Context context = getApplicationContext();
                     CharSequence text = "Nous avons trouvé des trajets qui pourraient vous intéressez !";
                     int duration = Toast.LENGTH_SHORT;
@@ -148,13 +146,12 @@ public class RechercheTrajetActivity extends AppCompatActivity {
                 }
 
                 // Toast : Aucun résultat
-                if (listTrajetTrouve.isEmpty() == true) {
+                if (listTrajetTrouve.isEmpty()) {
                     Context context = getApplicationContext();
                     CharSequence text = "Aucun résultat ne correspond à votre recherche !";
                     int duration = Toast.LENGTH_SHORT;
 
                     Toast.makeText(context, text, duration).show();
-                    return;
                 }
             }
         }

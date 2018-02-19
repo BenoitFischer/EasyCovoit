@@ -35,18 +35,17 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
     DatabaseReference mRootRef, mTrajetRef, mIDTrajet, mGenreCovoitureur , mIDCovoitureur , mPrenomCovoitureur, mNomCovoitureur, mDateRef, mHeureRef, mLieuDepartRef, mLieuArriveeRef, mNbPlacePropose;
     DatabaseReference mInfoTrajetRef, mInfoConducteurRef, mInfoPassagerRef;
     DatabaseReference currentUserNameDatabase, currentUserLastNameDatabase, currentUserGenreDatabase;
-    int currentDate = Calendar.getInstance().get(Calendar.DATE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_proposition_trajet2);
 
-        DateHeure = (EditText) findViewById(R.id.editDate);
-        LieuDepart = (EditText) findViewById(R.id.editLieuDepart);
-        LieuArrivee = (EditText) findViewById(R.id.editLieuArrivee);
-        NbPlacePropose = (EditText) findViewById(R.id.editNbPlacePropose);
-        btnProposer = (Button) findViewById(R.id.btnProposer);
+        DateHeure = findViewById(R.id.editDate);
+        LieuDepart = findViewById(R.id.editLieuDepart);
+        LieuArrivee = findViewById(R.id.editLieuArrivee);
+        NbPlacePropose = findViewById(R.id.editNbPlacePropose);
+        btnProposer = findViewById(R.id.btnProposer);
         DateHeure.setOnClickListener(edDateHeure);
         btnProposer.setOnClickListener(this);
 
@@ -65,6 +64,9 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
             Log.d(TAG,"No user signed in");
         }
 
+        /*
+        Récupère les données de l'utilisateurs pour dire dans la base de données qui propose le trajet
+         */
 
         currentUserNameDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Informations Personnelles").child("Prenom");
         currentUserLastNameDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Informations Personnelles").child("Nom");
@@ -130,8 +132,10 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
         strLieuDepart = LieuDepart.getText().toString();
         strLieuArrivee = LieuArrivee.getText().toString();
         strNbPlacePropose = NbPlacePropose.getText().toString();
-
-        if((strLieuDepart != null) || (strLieuArrivee != null) || (strNbPlacePropose != null)){
+        Log.v ("###########", strLieuDepart+"");
+        Log.v ("###########", strLieuArrivee+"");
+        Log.v ("###########", strNbPlacePropose+"");
+        if((strLieuDepart == null) || (strLieuArrivee == null) || (strNbPlacePropose == null)){
             Context context = getApplicationContext();
             CharSequence text = "Vous devez remplir les champs pour proposer un trajet !";
             int duration = Toast.LENGTH_SHORT;
@@ -142,7 +146,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
 
         else {
 
-            int nbPlacePropose = Integer.parseInt(NbPlacePropose.getText().toString());
+            int nbPlacePropose = 2;//Integer.parseInt(NbPlacePropose.getText().toString());
             mRootRef = FirebaseDatabase.getInstance().getReference();
             if (mRootRef != null) {
                 mTrajetRef = mRootRef.child("Trajet Date");
@@ -156,13 +160,11 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
                     mHeureRef = mInfoTrajetRef.child("Heure");
                     mNbPlacePropose = mInfoTrajetRef.child("Nombre de places restantes");
 
-
                     mInfoConducteurRef = mIDTrajet.child("Informations du conducteur");
                     mIDCovoitureur = mInfoConducteurRef.child("ID");
                     mGenreCovoitureur = mInfoConducteurRef.child("Genre");
                     mNomCovoitureur = mInfoConducteurRef.child("Nom");
                     mPrenomCovoitureur = mInfoConducteurRef.child("Prenom");
-
 
                     mInfoPassagerRef = mIDTrajet.child("Informations de passagers");
 
