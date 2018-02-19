@@ -119,6 +119,8 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
     private View.OnClickListener edDateHeure = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+
+            Log.v ("000000000", strDate+"");
             datePicker();
         }
     };
@@ -128,14 +130,23 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
 
         //-- Stockage d'une proposition de trajet
 
+        DateHeure = findViewById(R.id.editDate);
+        LieuDepart = findViewById(R.id.editLieuDepart);
+        LieuArrivee = findViewById(R.id.editLieuArrivee);
+        NbPlacePropose = findViewById(R.id.editNbPlacePropose);
+
         //Stockage du lieu de départ, du lieu de d'arrivée, du nombre de place proposé
         strLieuDepart = LieuDepart.getText().toString();
         strLieuArrivee = LieuArrivee.getText().toString();
         strNbPlacePropose = NbPlacePropose.getText().toString();
-        Log.v ("###########", strLieuDepart+"");
-        Log.v ("###########", strLieuArrivee+"");
-        Log.v ("###########", strNbPlacePropose+"");
-        if((strLieuDepart == null) || (strLieuArrivee == null) || (strNbPlacePropose == null)){
+        Log.v ("1111111111", strLieuDepart+"");
+        Log.v ("1111111111", LieuDepart+"");
+
+        Log.v ("22222222", strLieuArrivee+"");
+        Log.v ("333333333", strNbPlacePropose+"");
+        Log.v ("444444444", strDate+"");
+
+        if((strLieuDepart == null) || (strLieuArrivee == null) || (strNbPlacePropose == null) || (strDate == null)){
             Context context = getApplicationContext();
             CharSequence text = "Vous devez remplir les champs pour proposer un trajet !";
             int duration = Toast.LENGTH_SHORT;

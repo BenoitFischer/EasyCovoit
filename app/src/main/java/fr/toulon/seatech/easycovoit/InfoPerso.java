@@ -1,14 +1,7 @@
 package fr.toulon.seatech.easycovoit;
 
-
-import android.app.Application;
-import android.content.Intent;
-import android.media.session.MediaSession;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,24 +10,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.EventListener;
-
-/**
- * Created by Benoit Fischer on 16/01/2018.
- */
 
 // ---------------------------- Identifiants Firebase --------------
 //  id : easycovoit18@gmail.com
@@ -56,7 +39,7 @@ public class InfoPerso extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.info_perso);
-        bValider = (Button) findViewById(R.id.valider);
+        bValider = findViewById(R.id.btn_valider);
         setTitle("Informations personnelles");
         // Read datas from the database
 
@@ -206,8 +189,8 @@ public class InfoPerso extends AppCompatActivity {
         });
 
         // récupération des lieux de domicile et de travail
-        editTextHabitat= (EditText) findViewById (R.id.lieuHabitatText);
-        editTextBoulot= (EditText) findViewById (R.id.lieuBoulotText);
+        editTextHabitat= findViewById (R.id.lieuHabitatText);
+        editTextBoulot= findViewById (R.id.lieuBoulotText);
 
         // met en place un click listener sur le bouton valider
         bValider.setOnClickListener(bValiderListener);
