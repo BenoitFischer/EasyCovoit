@@ -2,6 +2,7 @@ package fr.toulon.seatech.easycovoit;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,31 +27,25 @@ import java.util.Calendar;
 public class PropositionTrajetActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "";
-
     int mAnnee, mMois, mJour, mHeure, mMinute;
     long nbTrajetExistants;
-
     EditText DateHeure, LieuDepart, LieuArrivee, NbPlacePropose;
     Button btnProposer;
-
     String uid, strGenreCovoitureur, strNomCovoitureur, strPrenomCovoitureur, strLieuDepart, strLieuArrivee, strDate, strHeure, strNbPlacePropose;
-
     DatabaseReference mRootRef, mTrajetRef, mIDTrajet, mGenreCovoitureur , mIDCovoitureur , mPrenomCovoitureur, mNomCovoitureur, mDateRef, mHeureRef, mLieuDepartRef, mLieuArriveeRef, mNbPlacePropose;
-
     DatabaseReference mInfoTrajetRef, mInfoConducteurRef, mInfoPassagerRef;
-
     DatabaseReference currentUserNameDatabase, currentUserLastNameDatabase, currentUserGenreDatabase;
-    int currentDate = Calendar.getInstance().get(Calendar.DATE);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_proposition_trajet2);
-        setTitle("Proposer un trajet");
-        DateHeure = (EditText) findViewById(R.id.editDate);
-        LieuDepart = (EditText) findViewById(R.id.editLieuDepart);
-        LieuArrivee = (EditText) findViewById(R.id.editLieuArrivee);
-        NbPlacePropose = (EditText) findViewById(R.id.editNbPlacePropose);
-        btnProposer = (Button) findViewById(R.id.btnProposer);
+
+        DateHeure = findViewById(R.id.editDate);
+        LieuDepart = findViewById(R.id.editLieuDepart);
+        LieuArrivee = findViewById(R.id.editLieuArrivee);
+        NbPlacePropose = findViewById(R.id.editNbPlacePropose);
+        btnProposer = findViewById(R.id.btnProposer);
         DateHeure.setOnClickListener(edDateHeure);
         btnProposer.setOnClickListener(this);
 
@@ -68,56 +64,49 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
             Log.d(TAG,"No user signed in");
         }
 
+        /*
+        Récupère les données de l'utilisateurs pour dire dans la base de données qui propose le trajet
+         */
 
-        //Récupération du nom d'utilisateur actuel en base de données
         currentUserNameDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Informations Personnelles").child("Prenom");
+        currentUserLastNameDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Informations Personnelles").child("Nom");
+        currentUserGenreDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Informations Personnelles").child("Genre");
 
+        // listener du prénom de l'utilisateur
         currentUserNameDatabase.addValueEventListener(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
                 strPrenomCovoitureur = dataSnapshot.getValue(String.class);
-                if(strPrenomCovoitureur!=null){
-                    Log.v("prenom conducteur:", strPrenomCovoitureur);
-                }
-
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "Failed to read value.");
             }
         });
-        //Récupération du prénom d'utilisateur actuel en base de données
-        currentUserLastNameDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Informations Personnelles").child("Nom");
 
+        // listener du nom de l'utilisateur
         currentUserLastNameDatabase.addValueEventListener(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
                 strNomCovoitureur = dataSnapshot.getValue(String.class);
-                if(strNomCovoitureur != null){
-                    Log.v("nom conducteur:", strNomCovoitureur);
-                }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "Failed to read value.");
             }
         });
-        //Récupération du genre d'utilisateur actuel en base de données
-        currentUserGenreDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("Informations Personnelles").child("Genre");
 
+        // listener du genre de l'utilisateur
         currentUserGenreDatabase.addValueEventListener(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
                 strGenreCovoitureur = dataSnapshot.getValue(String.class);
-                if(strGenreCovoitureur != null){
-                    Log.v("Genre conducteur:", strGenreCovoitureur);
-                }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -127,7 +116,6 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
 
     }
 
-    // listener du champ de saisi pour la date et heure du trajet à proposer
     private View.OnClickListener edDateHeure = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -137,115 +125,120 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
 
     @Override
     public void onClick(View v) {
+
         //-- Stockage d'une proposition de trajet
 
         //Stockage du lieu de départ, du lieu de d'arrivée, du nombre de place proposé
         strLieuDepart = LieuDepart.getText().toString();
         strLieuArrivee = LieuArrivee.getText().toString();
         strNbPlacePropose = NbPlacePropose.getText().toString();
+        Log.v ("###########", strLieuDepart+"");
+        Log.v ("###########", strLieuArrivee+"");
+        Log.v ("###########", strNbPlacePropose+"");
+        if((strLieuDepart == null) || (strLieuArrivee == null) || (strNbPlacePropose == null)){
+            Context context = getApplicationContext();
+            CharSequence text = "Vous devez remplir les champs pour proposer un trajet !";
+            int duration = Toast.LENGTH_SHORT;
 
-        int nbPlacePropose = Integer.parseInt(NbPlacePropose.getText().toString());
-
-        mRootRef = FirebaseDatabase.getInstance().getReference();
-        if(mRootRef !=null){
-            mTrajetRef = mRootRef.child("Trajet Date");
-            mDateRef = mTrajetRef.child(strDate);
-            //vérification d'existence du 'parent' de la date du trajet et ajout du premier trajet pour cette date si aucun 'child'
-            //existe
-            if(mDateRef!=null && nbTrajetExistants==0){
-                mIDTrajet = mDateRef.child("Trajet " + String.valueOf(1));
-
-                mInfoTrajetRef = mIDTrajet.child("Informations du trajet");
-                mLieuDepartRef = mInfoTrajetRef.child("Lieu de départ");
-                mLieuArriveeRef = mInfoTrajetRef.child("Lieu d'arrivée");
-                mHeureRef =  mInfoTrajetRef.child("Heure");
-                mNbPlacePropose = mInfoTrajetRef.child("Nombre de places restantes");
-
-
-                mInfoConducteurRef = mIDTrajet.child("Informations du conducteur");
-                mIDCovoitureur = mInfoConducteurRef.child("ID");
-                mGenreCovoitureur = mInfoConducteurRef.child("Genre");
-                mNomCovoitureur = mInfoConducteurRef.child("Nom");
-                mPrenomCovoitureur = mInfoConducteurRef.child("Prenom");
-
-
-                mInfoPassagerRef = mIDTrajet.child("Informations de passagers");
-
-                for(int i=1;i<=nbPlacePropose;++i) {
-                    mInfoConducteurRef = mInfoPassagerRef.child("Passager " + String.valueOf(i));
-                    DatabaseReference mIDPassager = mInfoConducteurRef.child("ID");
-                    DatabaseReference mGenrePassager = mInfoConducteurRef.child("Genre");
-                    DatabaseReference mNomPassager = mInfoConducteurRef.child("Nom");
-                    DatabaseReference mPrenomPassager = mInfoConducteurRef.child("Prenom");
-                    mIDPassager.setValue("");
-                    mGenrePassager.setValue("");
-                    mNomPassager.setValue("");
-                    mPrenomPassager.setValue("");
-                }
-            }
-            //vérification d'existence du 'parent' de la date du trajet et ajout trajet pour cette date
-            else if(mDateRef!=null && nbTrajetExistants>0){
-                Log.v("nbTrajetsExistants>0:", String.valueOf(nbTrajetExistants));
-                mIDTrajet = mDateRef.child("Trajet " + String.valueOf(++nbTrajetExistants));
-                Log.v("nbTrajetsExistants>0++:", String.valueOf(nbTrajetExistants));
-
-                mInfoTrajetRef = mIDTrajet.child("Informations du trajet");
-                mLieuDepartRef = mInfoTrajetRef.child("Lieu de départ");
-                mLieuArriveeRef = mInfoTrajetRef.child("Lieu d'arrivée");
-                //mDateRef = mInfoTrajetRef.child("Date");
-                mHeureRef =  mInfoTrajetRef.child("Heure");
-                mNbPlacePropose = mInfoTrajetRef.child("Nombre de places restantes");
-
-
-                mInfoConducteurRef = mIDTrajet.child("Informations du conducteur");
-                mIDCovoitureur = mInfoConducteurRef.child("ID");
-                mGenreCovoitureur = mInfoConducteurRef.child("Genre");
-                mNomCovoitureur = mInfoConducteurRef.child("Nom");
-                mPrenomCovoitureur = mInfoConducteurRef.child("Prenom");
-
-
-                mInfoPassagerRef = mIDTrajet.child("Informations de passagers");
-
-                for(int i=1;i<=nbPlacePropose;++i) {
-                    mInfoConducteurRef = mInfoPassagerRef.child("Passager " + String.valueOf(i));
-                    DatabaseReference mIDPassager = mInfoConducteurRef.child("ID");
-                    DatabaseReference mGenrePassager = mInfoConducteurRef.child("Genre");
-                    DatabaseReference mNomPassager = mInfoConducteurRef.child("Nom");
-                    DatabaseReference mPrenomPassager = mInfoConducteurRef.child("Prenom");
-                    mIDPassager.setValue("");
-                    mGenrePassager.setValue("");
-                    mNomPassager.setValue("");
-                    mPrenomPassager.setValue("");
-
-                }
-            }
+            Toast.makeText(context, text, duration).show();
+            return;
         }
 
-        Log.v("nbTrajetsExistants:", String.valueOf(getNbTrajetExistants()));
+        else {
 
-        // Ecriture dans la base de donnée
-        mIDCovoitureur.setValue(uid);
-        mPrenomCovoitureur.setValue(strPrenomCovoitureur);
-        mNomCovoitureur.setValue(strNomCovoitureur);
-        mLieuDepartRef.setValue(strLieuDepart);
-        mLieuArriveeRef.setValue(strLieuArrivee);
-        //mDateRef.setValue(strDate);
-        mHeureRef.setValue(strHeure);
-        mNbPlacePropose.setValue(strNbPlacePropose);
-        //Pour voir les valeurs que j'ai récupérées
-        Log.v("ID de conducteur", uid);
-        Log.v("Prenom de conducteur", strPrenomCovoitureur);
-        Log.v("Nom de conducteur", strNomCovoitureur);
-        Log.v("Lieu de départ",strLieuDepart);
-        Log.v("Lieu d'arrivée",strLieuArrivee);
-        Log.v("Date",strDate);
-        Log.v("Heure",strDate);
-        Log.v("Nb de places restantes",strNbPlacePropose);
-        // Retourne sur le main
-        Intent intent = new Intent(PropositionTrajetActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+            int nbPlacePropose = 2;//Integer.parseInt(NbPlacePropose.getText().toString());
+            mRootRef = FirebaseDatabase.getInstance().getReference();
+            if (mRootRef != null) {
+                mTrajetRef = mRootRef.child("Trajet Date");
+                mDateRef = mTrajetRef.child(strDate);
 
+                if (mDateRef != null && nbTrajetExistants == 0) {
+                    mIDTrajet = mDateRef.child("Trajet " + String.valueOf(1));
+                    mInfoTrajetRef = mIDTrajet.child("Informations du trajet");
+                    mLieuDepartRef = mInfoTrajetRef.child("Lieu de départ");
+                    mLieuArriveeRef = mInfoTrajetRef.child("Lieu d'arrivée");
+                    mHeureRef = mInfoTrajetRef.child("Heure");
+                    mNbPlacePropose = mInfoTrajetRef.child("Nombre de places restantes");
+
+                    mInfoConducteurRef = mIDTrajet.child("Informations du conducteur");
+                    mIDCovoitureur = mInfoConducteurRef.child("ID");
+                    mGenreCovoitureur = mInfoConducteurRef.child("Genre");
+                    mNomCovoitureur = mInfoConducteurRef.child("Nom");
+                    mPrenomCovoitureur = mInfoConducteurRef.child("Prenom");
+
+                    mInfoPassagerRef = mIDTrajet.child("Informations de passagers");
+
+                    for (int i = 1; i <= nbPlacePropose; ++i) {
+                        mInfoConducteurRef = mInfoPassagerRef.child("Passager " + String.valueOf(i));
+                        DatabaseReference mIDPassager = mInfoConducteurRef.child("ID");
+                        DatabaseReference mGenrePassager = mInfoConducteurRef.child("Genre");
+                        DatabaseReference mNomPassager = mInfoConducteurRef.child("Nom");
+                        DatabaseReference mPrenomPassager = mInfoConducteurRef.child("Prenom");
+                        mIDPassager.setValue("");
+                        mGenrePassager.setValue("");
+                        mNomPassager.setValue("");
+                        mPrenomPassager.setValue("");
+                    }
+                } else if (mDateRef != null && nbTrajetExistants > 0) {
+
+                    mIDTrajet = mDateRef.child("Trajet " + String.valueOf(++nbTrajetExistants));
+
+                    mInfoTrajetRef = mIDTrajet.child("Informations du trajet");
+                    mLieuDepartRef = mInfoTrajetRef.child("Lieu de départ");
+                    mLieuArriveeRef = mInfoTrajetRef.child("Lieu d'arrivée");
+                    //mDateRef = mInfoTrajetRef.child("Date");
+                    mHeureRef = mInfoTrajetRef.child("Heure");
+                    mNbPlacePropose = mInfoTrajetRef.child("Nombre de places restantes");
+
+                    mInfoConducteurRef = mIDTrajet.child("Informations du conducteur");
+                    mIDCovoitureur = mInfoConducteurRef.child("ID");
+                    mGenreCovoitureur = mInfoConducteurRef.child("Genre");
+                    mNomCovoitureur = mInfoConducteurRef.child("Nom");
+                    mPrenomCovoitureur = mInfoConducteurRef.child("Prenom");
+
+                    mInfoPassagerRef = mIDTrajet.child("Informations de passagers");
+
+                    for (int i = 1; i <= nbPlacePropose; ++i) {
+                        mInfoConducteurRef = mInfoPassagerRef.child("Passager " + String.valueOf(i));
+                        DatabaseReference mIDPassager = mInfoConducteurRef.child("ID");
+                        DatabaseReference mGenrePassager = mInfoConducteurRef.child("Genre");
+                        DatabaseReference mNomPassager = mInfoConducteurRef.child("Nom");
+                        DatabaseReference mPrenomPassager = mInfoConducteurRef.child("Prenom");
+                        mIDPassager.setValue("");
+                        mGenrePassager.setValue("");
+                        mNomPassager.setValue("");
+                        mPrenomPassager.setValue("");
+
+                    }
+                }
+            }
+
+            Log.v("nbTrajetsExistants:", String.valueOf(getNbTrajetExistants()));
+
+
+            // Ecriture dans la base de donnée
+            mIDCovoitureur.setValue(uid);
+            mPrenomCovoitureur.setValue(strPrenomCovoitureur);
+            mNomCovoitureur.setValue(strNomCovoitureur);
+            mLieuDepartRef.setValue(strLieuDepart);
+            mLieuArriveeRef.setValue(strLieuArrivee);
+            //mDateRef.setValue(strDate);
+            mHeureRef.setValue(strHeure);
+            mNbPlacePropose.setValue(strNbPlacePropose);
+            //Pour voir les valeurs que j'ai récupérées
+            Log.v("ID de conducteur", uid);
+            Log.v("Prenom de conducteur", strPrenomCovoitureur);
+            Log.v("Nom de conducteur", strNomCovoitureur);
+            Log.v("Lieu de départ", strLieuDepart);
+            Log.v("Lieu d'arrivée", strLieuArrivee);
+            Log.v("Date", strDate);
+            Log.v("Heure", strDate);
+            Log.v("Nb de places restantes", strNbPlacePropose);
+            // Retourne sur le main
+            Intent intent = new Intent(PropositionTrajetActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private void datePicker(){
@@ -259,7 +252,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
         //DatePickerDialog(Context context, DatePickerDialog.OnDateSetListener listener, int year, int month, int dayOfMonth)
         //Creates a new date picker dialog for the specified date using the parent context's default date picker dialog theme.
 
-        //Get yesterday's date to disable previous dates when user pick a date
+        //Get yesterday's date
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1);
 
@@ -309,7 +302,6 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
 
                         mHeure = hourOfDay;
                         mMinute = minute;
-
                         strHeure = updateTime(hourOfDay, minute);
                         DateHeure.setText(strDate+" "+ strHeure);
 
@@ -319,8 +311,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
     }
 
     private String updateTime(int hours, int mins) {
-        //if user choose for example 13H5 on timePickerDialog, this fonction add a '0' prefixe for the minute indicator
-        //so time choosen becomes 13h05
+
         String minutes = "";
         if (mins < 10)
             minutes = "0" + mins;

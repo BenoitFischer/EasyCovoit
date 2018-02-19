@@ -1,9 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="fr.toulon.seatech.easycovoit.PropositionTrajet">
+    tools:context="fr.toulon.seatech.easycovoit.PropositionTrajetActivity">
+
+    <TextView
+        android:id="@+id/titrePropositionTrajet1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/titrePropositionTrajet1" />
+
+    <TextView
+        android:id="@+id/titrePropositionTrajet2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/titrePropositionTrajet2" />
+
+    <TextView
+        android:id="@+id/titrePropositionTrajet3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/titrePropositionTrajet3" />
 
     <TextView
         android:id="@+id/textView8"
@@ -14,7 +42,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="26dp"
         android:layout_marginStart="26dp"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="120dp"
         android:text="@string/depart"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@android:color/black" />
@@ -64,7 +92,7 @@
         android:layout_alignBottom="@+id/editDate"
         android:layout_alignLeft="@+id/textView9"
         android:layout_alignStart="@+id/textView9"
-        android:text="@string/dateHeure"
+        android:text="@string/dateHeure_propose"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@android:color/black" />
 
@@ -85,19 +113,20 @@
         android:id="@+id/btnProposer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editNbPlacePropose"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="69dp"
-        android:text="@string/proposer" />
+        android:layout_marginBottom="41dp"
+        android:text="@string/btn_proposer" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/tvNbPlaces"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/editNbPlacePropose"
-        android:layout_alignBottom="@+id/editNbPlacePropose"
         android:layout_alignLeft="@+id/textView10"
         android:layout_alignStart="@+id/textView10"
+        android:layout_alignBaseline="@+id/editNbPlacePropose"
+        android:layout_alignBottom="@+id/editNbPlacePropose"
+        android:layout_below="@+id/editDate"
         android:text="@string/nbPlaceDispo"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@android:color/black" />
@@ -107,9 +136,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editDate"
-        android:layout_toEndOf="@+id/textView7"
-        android:layout_toRightOf="@+id/textView7"
+        android:layout_toEndOf="@+id/tvNbPlaces"
+        android:layout_toRightOf="@+id/tvNbPlaces"
         android:ems="10"
         android:inputType="number" />
+
+
+
 
 </RelativeLayout>

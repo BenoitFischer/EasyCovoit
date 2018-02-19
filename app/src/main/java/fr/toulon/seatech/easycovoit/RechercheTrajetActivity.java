@@ -55,7 +55,7 @@ public class RechercheTrajetActivity extends AppCompatActivity {
 
     }
 
-
+    // Listener pour récuperer le lieu de départ
     private View.OnClickListener onClickDepartListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -64,6 +64,7 @@ public class RechercheTrajetActivity extends AppCompatActivity {
         }
     };
 
+    // Listener pour récuperer le lieu d'arrivée
     private View.OnClickListener onClickArriveListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -72,6 +73,7 @@ public class RechercheTrajetActivity extends AppCompatActivity {
         }
     };
 
+    // Listener pour récuperer la date
     private View.OnClickListener onClickDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -81,17 +83,18 @@ public class RechercheTrajetActivity extends AppCompatActivity {
                 Context context = getApplicationContext();
                 CharSequence text = "Vous devez remplir les champs Départ et Arrivé Avant de choisir la date !";
                 int duration = Toast.LENGTH_SHORT;
-
                 Toast.makeText(context, text, duration).show();
-                return;
             }
-            datePicker();
+            // si les champs sont bien remplis
+            else{
+                datePicker();
+            }
 
         }
 
     };
 
-
+    // Listener pour effectuer la recherche
     private View.OnClickListener onClickBouton = new View.OnClickListener() {
 
         @Override
@@ -106,51 +109,50 @@ public class RechercheTrajetActivity extends AppCompatActivity {
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast.makeText(context, text, duration).show();
-                return;
             }
 
-            // instanciation de la list des trajets trouvés
-            listTrajetTrouve = new ArrayList <String> ((int) nbTrajetExistants);
+            else {
 
-            // pour le nombre de trajets trouvé à cette date (nombre maximum de résultat possible)
-            for (int i = 0; i < (int) nbTrajetExistants+1; i++) {
-                // si les list on encore des éléments a la i eme place
-                if( i < listNbPlaces.size() && i < listTrajetArrive.size() && i < listTrajetDepart.size())
-                {
-                    //Si il y a de la place dans le trajet, si le départ correspond et si l'arrivée correspond
-                    if (listNbPlaces.get(i).equals(listTrajetArrive.get(i))
-                            && listNbPlaces.get(i).equals(listTrajetDepart.get(i)))
-                    {
-                        // ajout de l'élement dans la list des trajet trouvés
-                        listTrajetTrouve.add(String.valueOf(i + 1));
-                        Log.v("élément list", String.valueOf(listTrajetTrouve.get(i)));
+                // instanciation de la list des trajets trouvés
+                listTrajetTrouve = new ArrayList<String>((int) nbTrajetExistants);
+
+                // pour le nombre de trajets trouvé à cette date (nombre maximum de résultat possible)
+                for (int i = 0; i < (int) nbTrajetExistants + 1; i++) {
+                    // si les list on encore des éléments a la i eme place
+                    if (i < listNbPlaces.size() && i < listTrajetArrive.size() && i < listTrajetDepart.size()) {
+                        //Si il y a de la place dans le trajet, si le départ correspond et si l'arrivée correspond
+                        if (listNbPlaces.get(i).equals(listTrajetArrive.get(i))
+                                && listNbPlaces.get(i).equals(listTrajetDepart.get(i))) {
+                            // ajout de l'élement dans la list des trajet trouvés
+                            listTrajetTrouve.add(String.valueOf(i + 1));
+                            Log.v("élément list", String.valueOf(listTrajetTrouve.get(i)));
+                        }
                     }
                 }
-            }
 
-            // Toast : Résultat(s) trouvé(s) !
-            if (listTrajetTrouve.isEmpty() == false){
-                Context context = getApplicationContext();
-                CharSequence text = "Nous avons trouvé des trajets qui pourraient vous intéressez !";
-                int duration = Toast.LENGTH_SHORT;
+                // Toast : Résultat(s) trouvé(s) !
+                if (!listTrajetTrouve.isEmpty()) {
+                    Context context = getApplicationContext();
+                    CharSequence text = "Nous avons trouvé des trajets qui pourraient vous intéressez !";
+                    int duration = Toast.LENGTH_SHORT;
 
-                Toast.makeText(context, text, duration).show();
+                    Toast.makeText(context, text, duration).show();
 
-                //Ouvre l'activity en transferant la date et la liste des trajets trouvés
-                Intent intent = new Intent(RechercheTrajetActivity.this, ResultatRechercheTrajetActivity.class);
-                intent.putExtra("Date", strDate);
-                intent.putExtra("listTrajet", listTrajetTrouve);
-                startActivity(intent);
-            }
+                    //Ouvre l'activity en transferant la date et la liste des trajets trouvés
+                    Intent intent = new Intent(RechercheTrajetActivity.this, ResultatRechercheTrajetActivity.class);
+                    intent.putExtra("Date", strDate);
+                    intent.putExtra("listTrajet", listTrajetTrouve);
+                    startActivity(intent);
+                }
 
-            // Toast : Aucun résultat
-            if (listTrajetTrouve.isEmpty() == true){
-                Context context = getApplicationContext();
-                CharSequence text = "Aucun résultat ne correspond à votre recherche !";
-                int duration = Toast.LENGTH_SHORT;
+                // Toast : Aucun résultat
+                if (listTrajetTrouve.isEmpty()) {
+                    Context context = getApplicationContext();
+                    CharSequence text = "Aucun résultat ne correspond à votre recherche !";
+                    int duration = Toast.LENGTH_SHORT;
 
-                Toast.makeText(context, text, duration).show();
-                return;
+                    Toast.makeText(context, text, duration).show();
+                }
             }
         }
 

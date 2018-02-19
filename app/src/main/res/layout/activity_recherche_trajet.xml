@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context="fr.toulon.seatech.easycovoit.RechercheTrajetActivity">
 
+    <TextView
+        android:id="@+id/titreRechercherTrajet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/titrePropositionTrajet1" />
+
+
     <Button
         android:id="@+id/btnRechercherTrajet"
         android:layout_width="wrap_content"
@@ -13,19 +23,19 @@
         android:layout_below="@+id/edDate"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
-        android:text="Rechercher" />
+        android:text="@string/btn_rechercher_trajet" />
 
     <TextView
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="18dp"
-        android:layout_marginRight="18dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginRight="26dp"
+        android:layout_marginTop="100dp"
         android:layout_toLeftOf="@+id/btnRechercherTrajet"
         android:layout_toStartOf="@+id/btnRechercherTrajet"
-        android:text="Lieu de départ"
+        android:text="@string/depart"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <EditText
@@ -47,7 +57,7 @@
         android:layout_alignStart="@+id/textView12"
         android:layout_below="@+id/edDepart"
         android:layout_marginTop="16dp"
-        android:text="Lieu d'arrivée"
+        android:text="@string/arrivee"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <EditText
