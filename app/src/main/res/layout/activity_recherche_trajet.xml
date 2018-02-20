@@ -6,15 +6,6 @@
     android:layout_height="match_parent"
     tools:context="fr.toulon.seatech.easycovoit.RechercheTrajetActivity">
 
-    <TextView
-        android:id="@+id/titreRechercherTrajet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true"
-        android:text="@string/titreRechercherTrajet" />
-
 
     <Button
         android:id="@+id/btnRechercherTrajet"

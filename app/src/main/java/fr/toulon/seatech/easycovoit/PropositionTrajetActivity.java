@@ -130,21 +130,10 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
 
         //-- Stockage d'une proposition de trajet
 
-        DateHeure = findViewById(R.id.editDate);
-        LieuDepart = findViewById(R.id.editLieuDepart);
-        LieuArrivee = findViewById(R.id.editLieuArrivee);
-        NbPlacePropose = findViewById(R.id.editNbPlacePropose);
-
         //Stockage du lieu de départ, du lieu de d'arrivée, du nombre de place proposé
         strLieuDepart = LieuDepart.getText().toString();
         strLieuArrivee = LieuArrivee.getText().toString();
         strNbPlacePropose = NbPlacePropose.getText().toString();
-        Log.v ("1111111111", strLieuDepart+"");
-        Log.v ("1111111111", LieuDepart+"");
-
-        Log.v ("22222222", strLieuArrivee+"");
-        Log.v ("333333333", strNbPlacePropose+"");
-        Log.v ("444444444", strDate+"");
 
         if((strLieuDepart == null) || (strLieuArrivee == null) || (strNbPlacePropose == null) || (strDate == null)){
             Context context = getApplicationContext();
@@ -157,7 +146,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
 
         else {
 
-            int nbPlacePropose = 2;//Integer.parseInt(NbPlacePropose.getText().toString());
+            int nbPlacePropose = Integer.parseInt(NbPlacePropose.getText().toString());
             mRootRef = FirebaseDatabase.getInstance().getReference();
             if (mRootRef != null) {
                 mTrajetRef = mRootRef.child("Trajet Date");

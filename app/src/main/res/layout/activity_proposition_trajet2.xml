@@ -6,32 +6,6 @@
     android:layout_height="match_parent"
     tools:context="fr.toulon.seatech.easycovoit.PropositionTrajetActivity">
 
-    <TextView
-        android:id="@+id/titrePropositionTrajet1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true"
-        android:text="@string/titrePropositionTrajet1" />
-
-    <TextView
-        android:id="@+id/titrePropositionTrajet2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        android:layout_centerHorizontal="true"
-        android:text="@string/titrePropositionTrajet2" />
-
-    <TextView
-        android:id="@+id/titrePropositionTrajet3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="60dp"
-        android:layout_centerHorizontal="true"
-        android:text="@string/titrePropositionTrajet3" />
 
     <TextView
         android:id="@+id/textView8"
