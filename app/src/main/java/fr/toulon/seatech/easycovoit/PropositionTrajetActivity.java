@@ -220,6 +220,7 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
             mIDCovoitureur.setValue(uid);
             mPrenomCovoitureur.setValue(strPrenomCovoitureur);
             mNomCovoitureur.setValue(strNomCovoitureur);
+            mGenreCovoitureur.setValue(strGenreCovoitureur);
             mLieuDepartRef.setValue(strLieuDepart);
             mLieuArriveeRef.setValue(strLieuArrivee);
             //mDateRef.setValue(strDate);
@@ -252,10 +253,6 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
         //DatePickerDialog(Context context, DatePickerDialog.OnDateSetListener listener, int year, int month, int dayOfMonth)
         //Creates a new date picker dialog for the specified date using the parent context's default date picker dialog theme.
 
-        //Get yesterday's date
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -1);
-
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
 
@@ -282,8 +279,8 @@ public class PropositionTrajetActivity extends AppCompatActivity implements View
                 }, mAnnee, mMois, mJour);
 
         timePicker();
-        //Set yesterday time milliseconds as date pickers minimum date
-        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+        //Set today as date pickers minimum date
+        datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
         datePickerDialog.show();
     }
 

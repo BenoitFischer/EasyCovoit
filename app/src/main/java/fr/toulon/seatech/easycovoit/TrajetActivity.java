@@ -1,30 +1,28 @@
 package fr.toulon.seatech.easycovoit;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class TrajetActivity extends AppCompatActivity {
 
     String strDate;
-    ArrayList infoTrajet;
+    ArrayList<String> infoTrajet, infoConducteur;
+    int numTrajet;
     public DatabaseReference refTrajet;
+    private static final String TAG = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,67 +33,79 @@ public class TrajetActivity extends AppCompatActivity {
 
         //Get le bundle envoyé par l'intent qui appelle cette activité
         Bundle bundle = getIntent().getExtras();
-        strDate = bundle.getString("Date");
+        strDate = bundle.getString("strDate");
         Log.i("date", strDate);
         infoTrajet = bundle.getStringArrayList("infoTrajet");
-
+        numTrajet = bundle.getInt("numTrajet");
         // récupère la database de firebase
         refTrajet =  FirebaseDatabase.getInstance().getReference().child("Trajet Date");
+        Button reserver = (Button) findViewById(R.id.btnReserver);
+        reserver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+        donneesTrajet(new MyCallBack() {
+            @Override
+            public void onCallback(ArrayList<ArrayList<String>> value) {
+
+            }
+
+            @Override
+            public void TrajetActivityCallback(ArrayList<String> value) {
+
+                TextView identite = (TextView) findViewById(R.id.tvIdentiteChauffeur);
+                TextView depart = (TextView) findViewById(R.id.tvDepart);
+                TextView arrivee = (TextView) findViewById(R.id.tvArrivee);
+                TextView heure =  (TextView) findViewById(R.id.tvHeure);
+                TextView nbPlace = (TextView) findViewById(R.id.tvNbPlace);
+
+                String premiereLettre = "";
+                premiereLettre = value.get(3).substring(0, 1);
+                String genre = getGenre(value.get(0));
+                String conducteur = genre + " " + premiereLettre + ". " + value.get(2);
+                identite.setText(conducteur);
+                depart.setText(infoTrajet.get(2));
+                arrivee.setText(infoTrajet.get(1));
+                heure.setText(infoTrajet.get(0));
+                nbPlace.setText(infoTrajet.get(3));
+
+            }
+        });
     }
 
-    private void createLayoutTrajet(ArrayList infoTrajet) {
+    private void donneesTrajet(final MyCallBack myCallback) {
 
-        LinearLayout principalLayoutVertical =(LinearLayout)findViewById(R.id.linLayoutResultat);
-        principalLayoutVertical.setGravity(Gravity.CENTER);
-
-        ScrollView scrollView = new ScrollView(this);
-        scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-        LinearLayout layoutVertical = new LinearLayout(this);
-        layoutVertical.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
-        layoutVertical.setOrientation(LinearLayout.VERTICAL);
-        layoutVertical.setGravity(Gravity.CENTER);
-
-        scrollView.addView(layoutVertical);
-
-
-
-            GradientDrawable drawable = new GradientDrawable();
-            drawable.setShape(GradientDrawable.RECTANGLE);
-            drawable.setStroke(3, Color.BLACK);
-            drawable.setCornerRadius(2);
-            drawable.setColor(Color.LTGRAY);
-
-            LinearLayout layoutHorizontal = new LinearLayout(this);
-            layoutHorizontal.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
-            layoutVertical.setOrientation(LinearLayout.HORIZONTAL);
-            layoutHorizontal.setBackgroundDrawable(drawable);
-            layoutHorizontal.setGravity(Gravity.CENTER);
-
-            Button b = new Button(this);
-
-            b.setText("Réserver une place");
-            b.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
+        refTrajet.child(strDate).child("Trajet " + numTrajet).child("Informations du conducteur").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> iConducteur = new ArrayList<String>();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    iConducteur.add(ds.getValue(String.class));
                 }
-            });
+                myCallback.TrajetActivityCallback(iConducteur);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "Failed to read value.");
+            }
+        });
+    }
 
-
-            TextView tv2 = new TextView(this);
-            tv2.setText("Lieu de départ : " + infoTrajet.get(2));
-            TextView tv3 = new TextView(this);
-            tv3.setText("Lieu de d'arrivée : " + infoTrajet.get(1));
-            TextView tv4 = new TextView(this);
-            tv4.setText("Date : " + strDate);
-            TextView tv5 = new TextView(this);
-            tv5.setText("Heure : " + infoTrajet.get(0));
-            layoutHorizontal.addView(tv2);
-            layoutHorizontal.addView(tv3);
-            layoutHorizontal.addView(tv4);
-            layoutHorizontal.addView(b);
-            layoutVertical.addView(layoutHorizontal);
-        principalLayoutVertical.addView(scrollView);
+    private String getGenre(String g){
+        String genre = "";
+        if(g.equals("Monsieur") || g.equals("Demoiseau")){
+            genre = "M";
+        }
+        else if(g.equals("Madame")){
+            genre = "Mme";
+        }
+        else if(g.equals("Mademoiselle")){
+            genre = "Mlle";
+        }
+        return genre;
     }
 }

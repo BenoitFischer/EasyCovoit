@@ -23,15 +23,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".InfoPerso"
-            android:label="@string/titreInfoPerso" />
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ResetPasswordActivity" />
-        <activity
-            android:name=".RechercheTrajetActivity"
-            android:label="@string/titreRechercherTrajet"/>
+        <activity android:name=".RechercheTrajetActivity" />
         <activity android:name=".ResultatRechercheTrajetActivity" />
-        <activity
-            android:name=".PropositionTrajetActivity"
-            android:label="@string/titrePropositionTrajet1"/>
+        <activity android:name=".PropositionTrajetActivity" />
         <activity android:name=".TrajetActivity"></activity>
     </application>
 

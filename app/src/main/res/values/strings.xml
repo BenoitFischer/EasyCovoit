@@ -75,7 +75,7 @@
     <string name="main_info_perso">Informations personnelles</string>
     <string name="main_proposer_trajet">Proposer un trajet</string>
     <string name="main_rechercher_trajet">Rechercher un trajet</string>
-    <string name="deconnexion">Se déconnecter></string>
+    <string name="deconnexion">Se déconnecter</string>
 
     <!--
             MainActivity
@@ -95,6 +95,13 @@
     -->
     <string name="app_name">EasyCovoit</string>
 
+    <!--
+            TrajetActivity
+    -->
+    <string name="strIdentite">Identité du chauffeur :</string>
+    <string name="strNbPlace">Nombre de places restantes :</string>
+    <string name="btnReserver">Réserver une place!</string>
+    <string name="strHeureDepart">Heure de départ :</string>
 
 
 </resources>

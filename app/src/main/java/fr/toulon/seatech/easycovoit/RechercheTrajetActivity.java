@@ -285,7 +285,8 @@ public class RechercheTrajetActivity extends AppCompatActivity {
                         });
                     }
                 }, mAnnee, mMois, mJour);
-
+        //Set today as date pickers minimum date
+        datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
         datePickerDialog.show();
 
     }
